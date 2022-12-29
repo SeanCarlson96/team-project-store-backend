@@ -10,7 +10,7 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     public Long id;
-    public String coupon_name;
+    public String couponName;
     public Date startDate;
     public Date stopDate;
     public Integer useLimit;
@@ -18,9 +18,9 @@ public class Coupon {
     @ManyToOne
     public AppUser user;
 
-    public Coupon(Long id, String coupon_name, Date startDate, Date stopDate, Integer useLimit, Double percentage, AppUser user) {
+    public Coupon(Long id, String couponName, Date startDate, Date stopDate, Integer useLimit, Double percentage, AppUser user) {
         this.id = id;
-        this.coupon_name = coupon_name;
+        this.couponName = couponName;
         this.startDate = startDate;
         this.stopDate = stopDate;
         this.useLimit = useLimit;
