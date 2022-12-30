@@ -6,10 +6,10 @@ import javax.persistence.*;
 public class ProductInCart {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Long id;
+    private Long id;
     @OneToOne
-    public Product product;
-    public Long quantity;
+    private Product product;
+    private Long quantity;
 
     public ProductInCart(Long id, Product product, Long quantity) {
         this.id = id;
@@ -17,5 +17,29 @@ public class ProductInCart {
         this.quantity = quantity;
     }
     public ProductInCart() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
     }
 }

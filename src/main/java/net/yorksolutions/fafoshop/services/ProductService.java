@@ -54,12 +54,27 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
-    public void modifyProduct(Long id, Product productRequest) throws Exception {
+    public void updateProduct(Long id, Product productRequest) throws Exception {
         Optional<Product> productOptional = productRepo.findById(id);
 
         if (productOptional.isEmpty())
             throw new Exception();
 
         // TODO - modify product logic
+
+        Product product = productOptional.get();
+
+        product.setProductName(productRequest.getProductName());
+        product.setPrice(productRequest.getPrice());
+        product.setSale(productRequest.getSale());
+        product.setCategories(productRequest.getCategories());
+        product.setDescription(productRequest.getDescription());
+        product.setDiscontinued(productRequest.getDiscontinued());
+        product.setImage(productRequest.getImage());
+        product.setAvailableDate(productRequest.getAvailableDate());
+        product.setQuantity(productRequest.getQuantity());
+        product.setMinAdPrice(productRequest.getMinAdPrice());
+
+        productRepo.save(product);
     }
 }

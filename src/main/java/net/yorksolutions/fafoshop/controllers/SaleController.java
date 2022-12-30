@@ -50,9 +50,9 @@ public class SaleController {
     }
 
     @PutMapping("/{id}")
-    public void modifySale(@PathVariable Long id, @RequestBody Sale sale) {
+    public void updateSale(@PathVariable Long id, @RequestBody Sale sale) {
         try {
-            service.modifySale(id, sale);
+            service.updateSale(id, sale);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

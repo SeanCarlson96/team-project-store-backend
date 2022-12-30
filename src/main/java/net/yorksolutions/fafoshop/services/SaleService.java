@@ -19,7 +19,7 @@ public class SaleService {
         return saleRepo.findAll();
     }
 
-    public Sale getSaleById(Long id) throws Exception {
+    public Sale getSaleById(Long id) {
         return saleRepo.findById(id).orElse(null);
     }
 
@@ -51,7 +51,7 @@ public class SaleService {
         saleRepo.deleteById(id);
     }
 
-    public void modifySale(Long id, Sale saleRequest) throws Exception {
+    public void updateSale(Long id, Sale saleRequest) throws Exception {
         Optional<Sale> saleOptional = saleRepo.findById(id);
 
         if (saleOptional.isEmpty())

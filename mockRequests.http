@@ -1,0 +1,21 @@
+### USERS
+GET http://localhost:8080/appusers
+Accept: application/json
+
+###
+
+POST http://localhost:8080/appusers
+Content-Type: application/json
+
+{
+  "email": "email",
+  "password": "pass",
+  "userType": "admin",
+  "carts": null,
+  "coupons": null
+}
+
+
+###
+
+
