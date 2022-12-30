@@ -35,7 +35,7 @@ public class ProductController {
         try {
             service.createProduct(product);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED);
         }
     }
 

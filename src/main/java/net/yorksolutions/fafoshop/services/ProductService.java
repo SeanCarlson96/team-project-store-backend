@@ -23,22 +23,23 @@ public class ProductService {
     }
 
     public void createProduct(Product productRequest) throws Exception {
-        Optional<Product> productOptional = productRepo.findProductByProductName(productRequest.productName);
+        Optional<Product> productOptional = productRepo.findProductByProductName(productRequest.getProductName());
 
         if (productOptional.isPresent())
             throw new Exception("Product name already exists");
 
         Product product = new Product();
-        product.productName = productRequest.productName;
-        product.price = productRequest.price;
-        product.sale = productRequest.sale;
-        product.categories = productRequest.categories;
-        product.description = productRequest.description;
-        product.discontinued = productRequest.discontinued;
-        product.image = productRequest.image;
-        product.availableDate = productRequest.availableDate;
-        product.quantity = productRequest.quantity;
-        product.minAdPrice = productRequest.minAdPrice;
+//        product.productName
+        product.setProductName(productRequest.getProductName());
+        product.setPrice(productRequest.getPrice());
+        product.setSale(productRequest.getSale());
+        product.setCategories(productRequest.getCategories());
+        product.setDescription(productRequest.getDescription());
+        product.setDiscontinued(productRequest.getDiscontinued());
+        product.setImage(productRequest.getImage());
+        product.setAvailableDate(productRequest.getAvailableDate());
+        product.setQuantity(productRequest.getQuantity());
+        product.setMinAdPrice(productRequest.getMinAdPrice());
 
         // TODO - post product logic
 
