@@ -54,7 +54,7 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
-    public void modifyProduct(Long id, Product productRequest) throws Exception {
+    public void updateProduct(Long id, Product productRequest) throws Exception {
         Optional<Product> productOptional = productRepo.findById(id);
 
         if (productOptional.isEmpty())
