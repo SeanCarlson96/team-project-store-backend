@@ -29,7 +29,6 @@ public class ProductService {
             throw new Exception("Product name already exists");
 
         Product product = new Product();
-//        product.productName
         product.setProductName(productRequest.getProductName());
         product.setPrice(productRequest.getPrice());
         product.setSale(productRequest.getSale());
@@ -55,7 +54,7 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
-    public void modifyProduct(Long id, Product product) throws Exception {
+    public void modifyProduct(Long id, Product productRequest) throws Exception {
         Optional<Product> productOptional = productRepo.findById(id);
 
         if (productOptional.isEmpty())
