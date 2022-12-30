@@ -7,16 +7,16 @@ import java.util.Set;
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Long id;
-    public String email;
-    public String password;
-    public String userType;
+    private Long id;
+    private String email;
+    private String password;
+    private String userType;
 
     @OneToMany
-    public Set<Cart> carts;
+    private Set<Cart> carts;
 
     @OneToMany
-    public Set<Coupon> coupons;
+    private Set<Coupon> coupons;
 
     public AppUser(Long id, String email, String password, String userType) {
         this.id = id;
@@ -25,4 +25,52 @@ public class AppUser {
         this.userType = userType;
     }
     public AppUser(){}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
+    }
+
+    public Set<Coupon> getCoupons() {
+        return coupons;
+    }
+
+    public void setCoupons(Set<Coupon> coupons) {
+        this.coupons = coupons;
+    }
 }

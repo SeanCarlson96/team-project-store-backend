@@ -34,6 +34,29 @@ public class AppUserController {
         }
     }
 
+    @PostMapping
+    public void createAppUser(
+            @RequestBody AppUser appUser
+    ){
+        try{
+            service.createAppUser(appUser);
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteAppUserById(
+        @PathVariable Long id
+    ){
+        try{
+            service.deleteAppUserById(id);
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 
 
 }
