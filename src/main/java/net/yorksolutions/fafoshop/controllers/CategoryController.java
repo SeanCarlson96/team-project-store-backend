@@ -19,6 +19,18 @@ public class CategoryController {
     @GetMapping
     public Iterable<Category> getAll(){return service.getAll(); }
 
+    @GetMapping(params = {"categoryName"})
+    public Category getCategoryByCategoryName(
+            @RequestParam String categoryName
+    ){
+        try {
+            return service.getCategoryByCategoryName(categoryName);
+        } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     @PostMapping
     public void createCategory(
             @RequestBody Category category

@@ -41,4 +41,8 @@ public class CategoryService {
 
             categoryRepo.deleteById(id);
     }
+
+    public Category getCategoryByCategoryName(String categoryName) {
+        return categoryRepo.findCategoryByCategoryName(categoryName).orElse(null);
+    }
 }
