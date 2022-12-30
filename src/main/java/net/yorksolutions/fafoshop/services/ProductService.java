@@ -61,5 +61,20 @@ public class ProductService {
             throw new Exception();
 
         // TODO - modify product logic
+
+        Product product = productOptional.get();
+
+        product.setProductName(productRequest.getProductName());
+        product.setPrice(productRequest.getPrice());
+        product.setSale(productRequest.getSale());
+        product.setCategories(productRequest.getCategories());
+        product.setDescription(productRequest.getDescription());
+        product.setDiscontinued(productRequest.getDiscontinued());
+        product.setImage(productRequest.getImage());
+        product.setAvailableDate(productRequest.getAvailableDate());
+        product.setQuantity(productRequest.getQuantity());
+        product.setMinAdPrice(productRequest.getMinAdPrice());
+
+        productRepo.save(product);
     }
 }
