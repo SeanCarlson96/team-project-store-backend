@@ -8,19 +8,20 @@ import java.util.Set;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Long id;
-    public String productName;
-    public Double price;
+    private Long id;
+    @Column(unique = true)
+    private String productName;
+    private Double price;
     @ManyToOne
-    public Sale sale;
+    private Sale sale;
     @ManyToMany
-    public Set<Category> categories;
-    public String description;
-    public Boolean discontinued;
-    public String image;
-    public Date availableDate;
-    public Integer quantity;
-    public Double minAdPrice;
+    private Set<Category> categories;
+    private String description;
+    private Boolean discontinued;
+    private String image;
+    private Date availableDate;
+    private Integer quantity;
+    private Double minAdPrice;
 
     public Product(Long id, String productName, Double price, Sale sale, Set<Category> categories, String description, Boolean discontinued, String image, Date availableDate, Integer quantity, Double minAdPrice) {
         this.id = id;
@@ -37,5 +38,93 @@ public class Product {
     }
 
     public Product() {
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Sale getSale() {
+        return sale;
+    }
+
+    public void setSale(Sale sale) {
+        this.sale = sale;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getDiscontinued() {
+        return discontinued;
+    }
+
+    public void setDiscontinued(Boolean discontinued) {
+        this.discontinued = discontinued;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Date getAvailableDate() {
+        return availableDate;
+    }
+
+    public void setAvailableDate(Date availableDate) {
+        this.availableDate = availableDate;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Double getMinAdPrice() {
+        return minAdPrice;
+    }
+
+    public void setMinAdPrice(Double minAdPrice) {
+        this.minAdPrice = minAdPrice;
     }
 }
