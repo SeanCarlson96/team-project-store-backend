@@ -23,32 +23,25 @@ public class AppUserController {
     }
 
     @GetMapping(params = {"email", "password"})
-    public AppUser getUserByEmailAndPassword(
-            @RequestParam String email,
-            @RequestParam String password
-    ){
+    public AppUser getUserByEmailAndPassword(@RequestParam String email, @RequestParam String password){
         try{
             return service.getUserByEmailAndPassword(email, password);
         } catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @PostMapping
-    public void createAppUser(
-            @RequestBody AppUser appUser
-    ){
+    public void createAppUser(@RequestBody AppUser appUser){
         try{
             service.createAppUser(appUser);
         } catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT);
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED);
         }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAppUserById(
-        @PathVariable Long id
-    ){
+    public void deleteAppUserById(@PathVariable Long id){
         try{
             service.deleteAppUserById(id);
         } catch (Exception e){
@@ -56,7 +49,12 @@ public class AppUserController {
         }
     }
 
-
-
-
+    @PutMapping("/{id}")
+    public void updateAppUser(@PathVariable Long id, @RequestBody AppUser appUser) {
+        try {
+            service.updateAppUser(id, appUser);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
 }
