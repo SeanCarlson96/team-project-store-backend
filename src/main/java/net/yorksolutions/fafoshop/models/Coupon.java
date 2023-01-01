@@ -9,14 +9,14 @@ import java.util.Date;
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Long id;
-    public String couponName;
-    public Date startDate;
-    public Date stopDate;
-    public Integer useLimit;
-    public Double percentage;
+    private Long id;
+    private String couponName;
+    private Date startDate;
+    private Date stopDate;
+    private Integer useLimit;
+    private Double percentage;
     @ManyToOne
-    public AppUser user;
+    private AppUser user;
 
     public Coupon(Long id, String couponName, Date startDate, Date stopDate, Integer useLimit, Double percentage, AppUser user) {
         this.id = id;
