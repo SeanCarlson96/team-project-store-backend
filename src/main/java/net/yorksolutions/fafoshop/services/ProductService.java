@@ -1,6 +1,9 @@
 package net.yorksolutions.fafoshop.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.yorksolutions.fafoshop.models.Category;
 import net.yorksolutions.fafoshop.models.Product;
+import net.yorksolutions.fafoshop.repositories.CategoryRepo;
 import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +12,11 @@ import java.util.Optional;
 @Service
 public class ProductService {
     private final ProductRepo productRepo;
+    private final CategoryRepo categoryRepo;
 
-    public ProductService(ProductRepo productRepo) {
+    public ProductService(ProductRepo productRepo, CategoryRepo categoryRepo) {
         this.productRepo = productRepo;
+        this.categoryRepo = categoryRepo;
     }
 
     public Iterable<Product> getAllProducts() {
@@ -43,6 +48,17 @@ public class ProductService {
         // TODO - post product logic
 
         productRepo.save(product);
+
+        for (Category productCategory: productRequest.getCategories()) {
+            Optional<Category> categoryOptional = categoryRepo.findCategoryByCategoryName(productCategory.getCategoryName());
+
+            if (categoryOptional.isEmpty())
+                throw new Exception("Category name does not exist");
+
+            Category category = categoryOptional.get();
+            category.getProducts().add(product);
+            categoryRepo.save(category);
+        }
     }
 
     public void deleteProductById(Long id) throws Exception {

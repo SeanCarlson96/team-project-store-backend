@@ -1,3 +1,4 @@
+
 ### USERS
 GET http://localhost:8080/appusers
 Accept: application/json
@@ -16,6 +17,117 @@ Content-Type: application/json
 }
 
 
+
+
+### CART
+GET http://localhost:8080/carts
+Accept: application/json
+
 ###
+
+POST http://localhost:8080/carts
+Content-Type: application/json
+
+{
+  "purchaseDate": "2022-12-30T00:35:50Z",
+  "products": [
+    {
+      "productName": "product1",
+      "price": 10.00,
+      "sale":null,
+      "categories": [{
+        "categoryName": "shoes"
+      }],
+      "description":"this is a description",
+      "discontinued": false,
+      "image":"some image",
+      "availableDate": "2022-12-30T00:35:50Z",
+      "quantity":100,
+      "minAdPrice": 8.00
+    }
+  ]
+}
+
+
+
+
+### COUPON
+GET http://localhost:8080/coupons
+Accept: application/json
+
+###
+
+POST http://localhost:8080/coupons
+Content-Type: application/json
+
+{}
+
+
+
+
+### CATEGORY
+GET http://localhost:8080/categories
+Accept: application/json
+
+###
+
+POST http://localhost:8080/categories
+Content-Type: application/json
+
+{
+  "categoryName": "socks",
+  "products": []
+}
+
+
+
+### SALE
+GET http://localhost:8080/sales
+Accept: application/json
+
+###
+
+POST http://localhost:8080/sales
+Content-Type: application/json
+
+{
+  "saleName": "sale1",
+  "startDate": "2022-12-30T00:35:50Z",
+  "stopDate": "2022-12-30T00:35:50Z",
+  "discountPercentage": 10
+}
+
+
+
+
+### PRODUCT
+GET http://localhost:8080/products
+Accept: application/json
+
+###
+
+POST http://localhost:8080/products
+Content-Type: application/json
+
+{
+  "productName": "product1",
+  "price": 10.00,
+  "sale":null,
+  "categories": [{
+    "id": 1,
+    "categoryName": "shoes",
+    "products": []
+  }, {
+    "id": 2,
+    "categoryName": "socks",
+    "products": []
+  }],
+  "description":"this is a description",
+  "discontinued": false,
+  "image":"some image",
+  "availableDate": "2022-12-30T00:35:50Z",
+  "quantity":100,
+  "minAdPrice": 8.00
+}
 
 
