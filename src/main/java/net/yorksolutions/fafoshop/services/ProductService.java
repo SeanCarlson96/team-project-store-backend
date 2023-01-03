@@ -31,9 +31,7 @@ public class ProductService {
     }
 
     public void createProduct(Product productRequest) throws Exception {
-        Optional<Product> productOptional = productRepo.findProductByProductName(productRequest.getProductName());
-
-        if (productOptional.isPresent())
+        if (productRepo.findProductByProductName(productRequest.getProductName()).isPresent())
             throw new Exception("Product name already exists");
 
         Product product = new Product();
@@ -54,7 +52,6 @@ public class ProductService {
 
         if (productRequest.getSale() != null) {
             Optional<Sale> saleOptional = saleRepo.findById(product.getSale().getId());
-
             if (saleOptional.isEmpty())
                 throw new Exception("Sale name does not exist");
 
@@ -76,9 +73,7 @@ public class ProductService {
     }
 
     public void deleteProductById(Long id) throws Exception {
-        Optional<Product> productOptional = productRepo.findById(id);
-
-        if (productOptional.isEmpty())
+        if (productRepo.findById(id).isEmpty())
             throw new Exception();
 
         productRepo.deleteById(id);

@@ -28,13 +28,10 @@ public class SaleService {
     }
 
     public void createSale(Sale saleRequest) throws Exception {
-        Optional<Sale> saleOptional = saleRepo.findSaleBySaleName(saleRequest.getSaleName());
-
-        if (saleOptional.isPresent())
+        if (saleRepo.findSaleBySaleName(saleRequest.getSaleName()).isPresent())
             throw new Exception("Sale name already exists");
 
         Sale sale = new Sale();
-
         sale.setSaleName(saleRequest.getSaleName());
         sale.setStartDate(saleRequest.getStartDate());
         sale.setStopDate(saleRequest.getStopDate());
@@ -47,7 +44,6 @@ public class SaleService {
 
         for (Product saleProduct: sale.getProducts()) {
             Optional<Product> productOptional = productRepo.findById(saleProduct.getId());
-
             if (productOptional.isEmpty())
                 throw new Exception("Product id does not exist");
 
@@ -58,9 +54,7 @@ public class SaleService {
     }
 
     public void deleteSaleById(Long id) throws Exception {
-        Optional<Sale> saleOptional = saleRepo.findById(id);
-
-        if (saleOptional.isEmpty())
+        if (saleRepo.findById(id).isEmpty())
             throw new Exception();
 
         saleRepo.deleteById(id);
@@ -73,7 +67,6 @@ public class SaleService {
             throw new Exception();
 
         Sale sale = saleOptional.get();
-
         sale.setSaleName(saleRequest.getSaleName());
         sale.setStartDate(saleRequest.getStartDate());
         sale.setStopDate(saleRequest.getStopDate());
