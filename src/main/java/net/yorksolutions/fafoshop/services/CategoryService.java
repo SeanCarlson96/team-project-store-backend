@@ -6,6 +6,7 @@ import net.yorksolutions.fafoshop.repositories.CategoryRepo;
 import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -44,6 +45,22 @@ public class CategoryService {
                 productRepo.save(product);
             }
         }
+    }
+
+    // Change name
+    public void updateCategories(Long id, Category category) throws Exception {
+        Optional<Category> currentCategory = categoryRepo.findById(id);
+
+        if(currentCategory.isEmpty()){
+            throw new Exception("Category not found");
+        }
+
+        Category getCategory = currentCategory.get();
+
+        getCategory.setCategoryName(category.getCategoryName());
+
+        categoryRepo.save(getCategory);
+
     }
 
     public void deleteCategoryById(Long id) throws Exception {
