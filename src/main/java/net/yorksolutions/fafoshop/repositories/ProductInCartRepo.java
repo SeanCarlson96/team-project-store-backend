@@ -1,11 +1,9 @@
 package net.yorksolutions.fafoshop.repositories;
 
-import net.yorksolutions.fafoshop.models.Cart;
+import net.yorksolutions.fafoshop.models.ProductInCart;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface CartRepo extends CrudRepository<Cart, Long> {
+public interface ProductInCartRepo extends CrudRepository<ProductInCart, Long> {
 }

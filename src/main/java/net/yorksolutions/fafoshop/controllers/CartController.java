@@ -1,6 +1,7 @@
 package net.yorksolutions.fafoshop.controllers;
 
 import net.yorksolutions.fafoshop.models.Cart;
+import net.yorksolutions.fafoshop.models.ProductInCart;
 import net.yorksolutions.fafoshop.services.CartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,16 @@ public class CartController {
         try{
             cartService.deleteCartById(id);
         } catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public void updateCart(@PathVariable Long id, @RequestBody ProductInCart product){
+        try{
+            cartService.updateCart(id,product);
+        }
+        catch(Exception e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }

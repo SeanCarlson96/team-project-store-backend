@@ -1,9 +1,12 @@
 package net.yorksolutions.fafoshop.services;
 
 import net.yorksolutions.fafoshop.models.Cart;
+import net.yorksolutions.fafoshop.models.Product;
+import net.yorksolutions.fafoshop.models.ProductInCart;
 import net.yorksolutions.fafoshop.repositories.CartRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.Optional;
 
 @Service
@@ -36,6 +39,21 @@ public class CartService {
 
         cartRepo.save(cart);
     }
+
+    public void updateCart(Long cartId, ProductInCart product) throws Exception{
+        Optional<Cart> cart = cartRepo.findById(cartId);
+
+        if(cart.isEmpty()){
+            throw new Exception();
+        }
+
+
+        Cart cartUpdated = cart.get();
+
+        cartUpdated.products.add(product);
+
+    }
+
 
     public void deleteCartById(Long id) throws Exception{
         Optional<Cart> cartOptional = cartRepo.findById(id);
