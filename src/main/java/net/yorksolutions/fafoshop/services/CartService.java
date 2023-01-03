@@ -46,10 +46,9 @@ public class CartService {
             throw new Exception();
         }
 
-
         Cart cartUpdated = cart.get();
-
         cartUpdated.products.add(product);
+        cartRepo.save(cartUpdated);
 
     }
 
