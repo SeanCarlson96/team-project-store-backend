@@ -8,5 +8,4 @@ import java.util.Optional;
 
 @Repository
 public interface CartRepo extends CrudRepository<Cart, Long> {
-
 }
