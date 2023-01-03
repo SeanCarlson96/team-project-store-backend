@@ -1,5 +1,8 @@
 package net.yorksolutions.fafoshop.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -12,8 +15,10 @@ public class Product {
     @Column(unique = true)
     private String productName;
     private Double price;
+    @JsonIgnore
     @ManyToOne
     private Sale sale;
+    @JsonIgnore
     @ManyToMany
     private Set<Category> categories;
     private String description;
