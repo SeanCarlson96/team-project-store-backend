@@ -50,19 +50,18 @@ public class CouponService {
         couponRepo.deleteById(id);
     }
 
-    public void updateCoupon(Long id, Coupon couponRequest) {
+    public void updateCoupon(Long id, Coupon couponRequest) throws Exception {
         Optional<Coupon> couponOpt = this.couponRepo.findById(id);
         if (couponOpt.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new Exception();
         }
         Coupon coupon = couponOpt.get();
-        coupon.setUser(couponRequest.getUser());
+        //coupon.setUser(couponRequest.getUser());
         coupon.setCouponName(couponRequest.getCouponName());
         coupon.setStartDate(couponRequest.getStartDate());
         coupon.setStopDate(couponRequest.getStopDate());
         coupon.setPercentage(couponRequest.getPercentage());
         coupon.setUseLimit(couponRequest.getUseLimit());
         couponRepo.save(coupon);
-
     }
 }
