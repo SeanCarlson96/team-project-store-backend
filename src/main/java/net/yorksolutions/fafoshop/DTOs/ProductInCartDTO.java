@@ -1,3 +1,4 @@
+
 package net.yorksolutions.fafoshop.DTOs;
 
 import java.util.Optional;
