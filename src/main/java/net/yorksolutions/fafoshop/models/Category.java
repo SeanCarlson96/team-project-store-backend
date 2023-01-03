@@ -8,6 +8,7 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Column(unique = true)
     private String categoryName;
     @ManyToMany
     private Set<Product> products;
