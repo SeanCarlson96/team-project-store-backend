@@ -2,6 +2,8 @@ package net.yorksolutions.fafoshop.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,9 +17,11 @@ public class Product {
     @Column(unique = true)
     private String productName;
     private Double price;
+    @Cascade(CascadeType.ALL)
     @JsonIgnore
     @ManyToOne
     private Sale sale;
+    @Cascade(CascadeType.ALL)
     @JsonIgnore
     @ManyToMany
     private Set<Category> categories;
