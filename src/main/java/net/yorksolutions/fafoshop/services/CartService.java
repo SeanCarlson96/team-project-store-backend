@@ -33,7 +33,6 @@ public class CartService {
             throw new Exception();
 
         Cart cart = new Cart();
-        cart.setId(cart.getId());
         cart.setPurchaseDate(cart.getPurchaseDate());
         cart.setProducts(cart.getProducts());
 
