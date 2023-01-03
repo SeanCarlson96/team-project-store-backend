@@ -18,6 +18,7 @@ public class CartService {
     public CartService(CartRepo cartRepo) {
         this.cartRepo = cartRepo;
     }
+
     public Iterable<Cart> getAll() {
         return cartRepo.findAll();
     }
@@ -33,31 +34,31 @@ public class CartService {
             throw new Exception();
 
         Cart cart = new Cart();
-        cart.setId(cart.getId());
         cart.setPurchaseDate(cart.getPurchaseDate());
+        cart.setProducts(cart.getProducts());
 
         cartRepo.save(cart);
     }
 
-    public void updateCart(Long cartId, ProductInCart product) throws Exception{
+    public void updateCart(Long cartId, ProductInCart product) throws Exception {
         Optional<Cart> cart = cartRepo.findById(cartId);
 
-        if(cart.isEmpty()){
+        if (cart.isEmpty()) {
             throw new Exception();
         }
 
-
         Cart cartUpdated = cart.get();
 
-        cartUpdated.products.add(product);
+        cartUpdated.getProducts().add(product);
+        cartRepo.save(cartUpdated);
 
     }
 
 
-    public void deleteCartById(Long id) throws Exception{
+    public void deleteCartById(Long id) throws Exception {
         Optional<Cart> cartOptional = cartRepo.findById(id);
 
-        if(cartOptional.isEmpty())
+        if (cartOptional.isEmpty())
             throw new Exception();
 
         cartRepo.deleteById(id);

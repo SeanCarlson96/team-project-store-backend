@@ -23,8 +23,8 @@ public class CartController {
         return cartService.getAll();
     }
 
-    @GetMapping(params = {"id"})
-    public Cart getCartById(@RequestParam Long id) {
+    @GetMapping("/{id}")
+    public Cart getCartById(@PathVariable Long id) {
         try {
             return cartService.getCartById(id);
         } catch (Exception e){
