@@ -1,10 +1,11 @@
 package net.yorksolutions.fafoshop.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.yorksolutions.fafoshop.models.Category;
 import net.yorksolutions.fafoshop.models.Product;
+import net.yorksolutions.fafoshop.models.Sale;
 import net.yorksolutions.fafoshop.repositories.CategoryRepo;
 import net.yorksolutions.fafoshop.repositories.ProductRepo;
+import net.yorksolutions.fafoshop.repositories.SaleRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,10 +14,12 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepo productRepo;
     private final CategoryRepo categoryRepo;
+    private final SaleRepo saleRepo;
 
-    public ProductService(ProductRepo productRepo, CategoryRepo categoryRepo) {
+    public ProductService(ProductRepo productRepo, CategoryRepo categoryRepo, SaleRepo saleRepo) {
         this.productRepo = productRepo;
         this.categoryRepo = categoryRepo;
+        this.saleRepo = saleRepo;
     }
 
     public Iterable<Product> getAllProducts() {
@@ -48,6 +51,17 @@ public class ProductService {
         // TODO - post product logic
 
         productRepo.save(product);
+
+        if (productRequest.getSale() != null) {
+            Optional<Sale> saleOptional = saleRepo.findSaleBySaleName(productRequest.getSale().getSaleName());
+
+            if (saleOptional.isEmpty())
+                throw new Exception("Sale name does not exist");
+
+            Sale sale = saleOptional.get();
+            sale.getProducts().add(product);
+            saleRepo.save(sale);
+        }
 
         for (Category productCategory: productRequest.getCategories()) {
             Optional<Category> categoryOptional = categoryRepo.findCategoryByCategoryName(productCategory.getCategoryName());

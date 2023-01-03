@@ -27,7 +27,7 @@ public class SaleService {
         Optional<Sale> saleOptional = saleRepo.findSaleBySaleName(saleRequest.getSaleName());
 
         if (saleOptional.isPresent())
-            throw new Exception();
+            throw new Exception("Sale name already exists");
 
         Sale sale = new Sale();
 
