@@ -1,6 +1,8 @@
 package net.yorksolutions.fafoshop.services;
 
+import net.yorksolutions.fafoshop.models.Product;
 import net.yorksolutions.fafoshop.models.Sale;
+import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import net.yorksolutions.fafoshop.repositories.SaleRepo;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +12,11 @@ import java.util.Optional;
 public class SaleService {
 
     private final SaleRepo saleRepo;
+    private final ProductRepo productRepo;
 
-    public SaleService(SaleRepo saleRepo) {
+    public SaleService(SaleRepo saleRepo, ProductRepo productRepo) {
         this.saleRepo = saleRepo;
+        this.productRepo = productRepo;
     }
 
     public Iterable<Sale> getAllSales() {
@@ -40,6 +44,17 @@ public class SaleService {
         // TODO - post sale logic
 
         saleRepo.save(sale);
+
+        for (Product saleProduct: sale.getProducts()) {
+            Optional<Product> productOptional = productRepo.findById(saleProduct.getId());
+
+            if (productOptional.isEmpty())
+                throw new Exception("Product id does not exist");
+
+            Product product = productOptional.get();
+            product.setSale(sale);
+            productRepo.save(product);
+        }
     }
 
     public void deleteSaleById(Long id) throws Exception {
