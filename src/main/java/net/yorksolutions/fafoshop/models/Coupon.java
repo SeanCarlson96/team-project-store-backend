@@ -10,6 +10,7 @@ public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Column(unique = true)
     private String couponName;
     private Date startDate;
     private Date stopDate;

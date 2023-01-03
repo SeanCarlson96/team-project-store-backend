@@ -1,5 +1,8 @@
 package net.yorksolutions.fafoshop.models;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -13,6 +16,7 @@ public class Sale {
     private String saleName;
     private Date startDate;
     private Date stopDate;
+    @Cascade(CascadeType.ALL)
     @OneToMany
     private Set<Product> products;
     private Double discountPercentage;

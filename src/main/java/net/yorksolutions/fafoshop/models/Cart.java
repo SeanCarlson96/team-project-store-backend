@@ -8,11 +8,11 @@ import java.util.Set;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Long id;
-    public Date purchaseDate;
+    private Long id;
+    private Date purchaseDate;
 
     @OneToMany
-    public Set<ProductInCart> products;
+    private Set<ProductInCart> products;
 
     public Cart(Long id, Date purchaseDate, Set<ProductInCart> products) {
         this.id = id;
