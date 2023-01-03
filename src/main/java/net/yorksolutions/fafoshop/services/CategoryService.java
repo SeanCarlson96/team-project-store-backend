@@ -58,6 +58,7 @@ public class CategoryService {
         Category getCategory = currentCategory.get();
 
         getCategory.setCategoryName(category.getCategoryName());
+        getCategory.setProducts(category.getProducts());
 
         categoryRepo.save(getCategory);
 
