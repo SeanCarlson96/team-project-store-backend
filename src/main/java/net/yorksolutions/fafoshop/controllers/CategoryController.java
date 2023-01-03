@@ -49,7 +49,7 @@ public class CategoryController {
         try {
             service.createCategory(category);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT);
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED);
         }
     }
 
