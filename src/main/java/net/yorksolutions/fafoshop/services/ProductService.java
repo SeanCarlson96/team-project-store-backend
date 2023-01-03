@@ -53,7 +53,7 @@ public class ProductService {
         productRepo.save(product);
 
         if (productRequest.getSale() != null) {
-            Optional<Sale> saleOptional = saleRepo.findSaleBySaleName(productRequest.getSale().getSaleName());
+            Optional<Sale> saleOptional = saleRepo.findById(product.getSale().getId());
 
             if (saleOptional.isEmpty())
                 throw new Exception("Sale name does not exist");
@@ -63,8 +63,8 @@ public class ProductService {
             saleRepo.save(sale);
         }
 
-        for (Category productCategory: productRequest.getCategories()) {
-            Optional<Category> categoryOptional = categoryRepo.findCategoryByCategoryName(productCategory.getCategoryName());
+        for (Category productCategory: product.getCategories()) {
+            Optional<Category> categoryOptional = categoryRepo.findById(productCategory.getId());
 
             if (categoryOptional.isEmpty())
                 throw new Exception("Category name does not exist");
