@@ -24,7 +24,7 @@ public class CategoryService {
     }
 
 
-    public void createCategory(Category categoryRequest) throws Exception{
+    public void createCategory(Category categoryRequest) throws Exception {
         if (categoryRepo.findCategoryByCategoryName(categoryRequest.getCategoryName()).isPresent())
             throw new Exception();
 
@@ -35,10 +35,9 @@ public class CategoryService {
         categoryRepo.save(category);
 
         if (category.getProducts() != null) {
-            for (Product categoryProduct: category.getProducts()) {
+            for (Product categoryProduct : category.getProducts()) {
                 Optional<Product> productOptional = productRepo.findById(categoryProduct.getId());
-                if (productOptional.isEmpty())
-                    throw new Exception("Product id does not exist");
+                if (productOptional.isEmpty()) throw new Exception("Product id does not exist");
 
                 Product product = productOptional.get();
                 product.getCategories().add(category);
@@ -49,13 +48,15 @@ public class CategoryService {
 
     public void deleteCategoryById(Long id) throws Exception {
         Optional<Category> categoryOptional = categoryRepo.findById(id);
-            if (categoryOptional.isEmpty())
-                throw new Exception();
+        if (categoryOptional.isEmpty()) throw new Exception();
 
-            categoryRepo.deleteById(id);
+        categoryRepo.deleteById(id);
     }
 
     public Category getCategoryByCategoryName(String categoryName) {
         return categoryRepo.findCategoryByCategoryName(categoryName).orElse(null);
+    }
+
+    public Category getCategoryById(Long id) { return categoryRepo.findById(id).orElse(null);
     }
 }

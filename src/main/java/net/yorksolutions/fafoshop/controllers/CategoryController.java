@@ -17,15 +17,26 @@ public class CategoryController {
     }
 
     @GetMapping
-    public Iterable<Category> getAll(){return service.getAll(); }
+    public Iterable<Category> getAll() {
+        return service.getAll();
+    }
 
     @GetMapping(params = {"categoryName"})
     public Category getCategoryByCategoryName(
             @RequestParam String categoryName
-    ){
+    ) {
         try {
             return service.getCategoryByCategoryName(categoryName);
-        } catch (Exception e){
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(params = {"id"})
+    public Category getCategory(@PathVariable Long id){
+        try {
+            return service.getCategoryById(id);
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
@@ -34,10 +45,10 @@ public class CategoryController {
     @PostMapping
     public void createCategory(
             @RequestBody Category category
-    ){
+    ) {
         try {
             service.createCategory(category);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT);
         }
     }
@@ -48,7 +59,7 @@ public class CategoryController {
     ) {
         try {
             service.deleteCategoryById(id);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
