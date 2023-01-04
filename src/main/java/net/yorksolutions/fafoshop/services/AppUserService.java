@@ -6,6 +6,9 @@ import net.yorksolutions.fafoshop.models.AppUser;
 import net.yorksolutions.fafoshop.models.Coupon;
 import net.yorksolutions.fafoshop.repositories.AppUserRepo;
 import net.yorksolutions.fafoshop.repositories.CouponRepo;
+
+import net.yorksolutions.fafoshop.repositories.CartRepo;
+
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,10 +17,16 @@ import java.util.*;
 public class AppUserService {
 
     private final AppUserRepo appUserRepo;
+
     private final CouponRepo couponRepo;
-    public AppUserService(AppUserRepo appUserRepo, CouponRepo couponRepo) {
+
+    private final CartRepo cartRepo;
+
+    public AppUserService(AppUserRepo appUserRepo, CartRepo cartRepo, CouponRepo couponRepo) {
         this.appUserRepo = appUserRepo;
+        this.cartRepo = cartRepo;
         this.couponRepo = couponRepo;
+
     }
 
     public Iterable<AppUser> getAll() {
