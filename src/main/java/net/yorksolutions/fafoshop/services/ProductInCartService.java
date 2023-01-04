@@ -29,7 +29,7 @@ public class ProductInCartService {
         // convert productInCartDto to productInCart to save repo
         for (ProductInCartDTO productDTO: cartRequest.products) {
             ProductInCart productInCart = new ProductInCart();
-            Optional<Product> product = productRepo.findById(productDTO.id.get());
+            Optional<Product> product = productRepo.findById(productDTO.productId);
 
             productInCart.setProduct(product.get());
             productInCart.setQuantity(productDTO.quantity);
@@ -48,7 +48,7 @@ public class ProductInCartService {
 
         ProductInCart productInCart = new ProductInCart();
 
-        Optional<Product> product = productRepo.findById(requestProduct.id.get());
+        Optional<Product> product = productRepo.findById(requestProduct.productId);
 
         productInCart.setProduct(product.get());
         productInCart.setQuantity(requestProduct.quantity);

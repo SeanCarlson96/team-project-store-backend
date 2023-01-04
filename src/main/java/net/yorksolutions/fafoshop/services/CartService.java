@@ -51,9 +51,9 @@ public class CartService {
         //cart.setUser(cart.getUser());
 
 //        ProductInCartService service = new ProductInCartService(productInCartRepo);
-//
-////        Set<ProductInCart> productInCart = service.createProductInCart(cartRequest);
-//
+////
+//        Set<ProductInCart> productInCart = productInCartService.createProductInCart(cartRequest);
+////
 //        cart.setProducts(productInCart);
 
         cartRepo.save(cart);
