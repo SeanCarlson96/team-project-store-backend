@@ -2,6 +2,7 @@ package net.yorksolutions.fafoshop.services;
 
 import net.yorksolutions.fafoshop.models.AppUser;
 import net.yorksolutions.fafoshop.repositories.AppUserRepo;
+import net.yorksolutions.fafoshop.repositories.CartRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -10,9 +11,11 @@ import java.util.Optional;
 public class AppUserService {
 
     private final AppUserRepo appUserRepo;
+    private final CartRepo cartRepo;
 
-    public AppUserService(AppUserRepo appUserRepo) {
+    public AppUserService(AppUserRepo appUserRepo, CartRepo cartRepo) {
         this.appUserRepo = appUserRepo;
+        this.cartRepo = cartRepo;
     }
 
     public Iterable<AppUser> getAll() {
