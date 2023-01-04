@@ -1,6 +1,10 @@
 package net.yorksolutions.fafoshop.controllers;
 
 import net.yorksolutions.fafoshop.DTOs.CartDTO;
+<<<<<<< Updated upstream
+=======
+import net.yorksolutions.fafoshop.DTOs.ProductInCartDTO;
+>>>>>>> Stashed changes
 import net.yorksolutions.fafoshop.models.Cart;
 import net.yorksolutions.fafoshop.models.ProductInCart;
 import net.yorksolutions.fafoshop.services.CartService;
@@ -34,7 +38,7 @@ public class CartController {
     }
 
     @PostMapping
-    public void createCart(@RequestBody Cart cart) {
+    public void createCart(@RequestBody CartDTO cart) {
         try {
             cartService.createCart(cart);
         } catch (Exception e){
