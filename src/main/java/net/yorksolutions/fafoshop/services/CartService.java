@@ -6,6 +6,7 @@ import net.yorksolutions.fafoshop.models.Cart;
 import net.yorksolutions.fafoshop.models.ProductInCart;
 import net.yorksolutions.fafoshop.repositories.AppUserRepo;
 import net.yorksolutions.fafoshop.repositories.CartRepo;
+import net.yorksolutions.fafoshop.repositories.ProductInCartRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,10 +15,14 @@ import java.util.Optional;
 public class CartService {
 
     private final CartRepo cartRepo;
+    private final ProductInCartRepo productInCartRepo;
+    private CartRepo cartRepo1;
     private final AppUserRepo appUserRepo;
 
+    public CartService(CartRepo cartRepo, ProductInCartRepo productInCartRepo) {
     public CartService(CartRepo cartRepo, AppUserRepo appUserRepo) {
         this.cartRepo = cartRepo;
+        this.productInCartRepo = productInCartRepo;
         this.appUserRepo = appUserRepo;
     }
 

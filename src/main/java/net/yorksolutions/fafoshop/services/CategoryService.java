@@ -51,7 +51,7 @@ public class CategoryService {
     public void updateCategories(Long id, Category category) throws Exception {
         Optional<Category> currentCategory = categoryRepo.findById(id);
 
-        if(currentCategory.isEmpty()){
+        if (currentCategory.isEmpty()) {
             throw new Exception("Category not found");
         }
 

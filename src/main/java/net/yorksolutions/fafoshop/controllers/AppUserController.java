@@ -1,5 +1,6 @@
 package net.yorksolutions.fafoshop.controllers;
 
+import net.yorksolutions.fafoshop.DTOs.AppUserDTO;
 import net.yorksolutions.fafoshop.models.AppUser;
 import net.yorksolutions.fafoshop.services.AppUserService;
 import org.springframework.http.HttpStatus;
@@ -32,7 +33,7 @@ public class AppUserController {
     }
 
     @PostMapping
-    public void createAppUser(@RequestBody AppUser appUser){
+    public void createAppUser(@RequestBody AppUserDTO appUser){
         try{
             service.createAppUser(appUser);
         } catch (Exception e){
@@ -50,7 +51,7 @@ public class AppUserController {
     }
 
     @PutMapping("/{id}")
-    public void updateAppUser(@PathVariable Long id, @RequestBody AppUser appUser) {
+    public void updateAppUser(@PathVariable Long id, @RequestBody AppUserDTO appUser) {
         try {
             service.updateAppUser(id, appUser);
         } catch (Exception e) {

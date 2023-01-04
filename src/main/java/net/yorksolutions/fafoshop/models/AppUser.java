@@ -1,5 +1,8 @@
 package net.yorksolutions.fafoshop.models;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
 import java.util.Set;
 
