@@ -1,19 +1,23 @@
 package net.yorksolutions.fafoshop.services;
 
 import net.yorksolutions.fafoshop.DTOs.AppUserDTO;
+import net.yorksolutions.fafoshop.DTOs.CouponDTO;
 import net.yorksolutions.fafoshop.models.AppUser;
+import net.yorksolutions.fafoshop.models.Coupon;
 import net.yorksolutions.fafoshop.repositories.AppUserRepo;
+import net.yorksolutions.fafoshop.repositories.CouponRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AppUserService {
 
     private final AppUserRepo appUserRepo;
-
-    public AppUserService(AppUserRepo appUserRepo) {
+    private final CouponRepo couponRepo;
+    public AppUserService(AppUserRepo appUserRepo, CouponRepo couponRepo) {
         this.appUserRepo = appUserRepo;
+        this.couponRepo = couponRepo;
     }
 
     public Iterable<AppUser> getAll() {
@@ -46,14 +50,24 @@ public class AppUserService {
 
     public void updateAppUser(Long id, AppUserDTO appUserRequest) throws Exception {
         Optional<AppUser> appUserOptional = appUserRepo.findById(id);
-
         if (appUserOptional.isEmpty())
             throw new Exception();
 
         AppUser appUser = appUserOptional.get();
-        appUser.setEmail(appUserRequest.email );
+        appUser.setEmail(appUserRequest.email);
         appUser.setPassword(appUserRequest.password);
         appUser.setUserType(appUserRequest.userType);
+
+        Set<Coupon> couponSet = new HashSet<>();
+        for (CouponDTO couponDTO: appUserRequest.coupons) {
+            //Coupon coupon = new Coupon();
+            Optional<Coupon> couponOpt = couponRepo.findCouponByCouponName(couponDTO.couponName);
+
+            Coupon c = couponOpt.get();
+            couponSet.add(c);
+        }
+        couponRepo.saveAll(couponSet);
+
         appUserRepo.save(appUser);
     }
 }

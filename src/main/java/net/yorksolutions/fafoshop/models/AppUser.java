@@ -1,5 +1,6 @@
 package net.yorksolutions.fafoshop.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -20,6 +21,8 @@ public class AppUser {
     private Set<Cart> carts;
 
     @OneToMany
+    @Cascade(CascadeType.ALL)
+    @JsonIgnoreProperties("appUsers")
     private Set<Coupon> coupons;
 
     public AppUser(Long id, String email, String password, String userType) {
