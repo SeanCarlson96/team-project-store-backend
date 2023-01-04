@@ -2,16 +2,17 @@ package net.yorksolutions.fafoshop.services;
 
 import net.yorksolutions.fafoshop.DTOs.CartDTO;
 import net.yorksolutions.fafoshop.DTOs.ProductInCartDTO;
-import net.yorksolutions.fafoshop.models.Cart;
 import net.yorksolutions.fafoshop.models.Product;
 import net.yorksolutions.fafoshop.models.ProductInCart;
 import net.yorksolutions.fafoshop.repositories.ProductInCartRepo;
 import net.yorksolutions.fafoshop.repositories.ProductRepo;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+@Service
 public class ProductInCartService {
     private final ProductInCartRepo productInCartRepo;
     private final ProductRepo productRepo;
@@ -42,7 +43,20 @@ public class ProductInCartService {
 
     }
 
-    public void updateProductInCart(){
+    public Set<ProductInCart> updateProductInCart(ProductInCartDTO requestProduct){
+        Set<ProductInCart> productHolder = new HashSet<>();
 
+        ProductInCart productInCart = new ProductInCart();
+
+        Optional<Product> product = productRepo.findById(requestProduct.id.get());
+
+        productInCart.setProduct(product.get());
+        productInCart.setQuantity(requestProduct.quantity);
+
+
+        ProductInCart savedProductInCart = productInCartRepo.save(productInCart);
+        productHolder.add(savedProductInCart);
+
+        return productHolder;
     }
 }
