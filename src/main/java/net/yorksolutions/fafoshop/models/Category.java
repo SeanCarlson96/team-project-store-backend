@@ -1,5 +1,6 @@
 package net.yorksolutions.fafoshop.models;
 
+import net.yorksolutions.fafoshop.DTOs.ProductDTO;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -44,7 +45,7 @@ public class Category {
         return products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(Iterable<ProductDTO> products) {
         this.products = products;
     }
 }
