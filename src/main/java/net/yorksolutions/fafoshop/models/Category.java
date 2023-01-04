@@ -45,7 +45,8 @@ public class Category {
         return products;
     }
 
-    public void setProducts(Iterable<ProductDTO> products) {
+    public void setProducts(Set<Product> products) {
         this.products = products;
     }
+
 }

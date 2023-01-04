@@ -1,13 +1,16 @@
 package net.yorksolutions.fafoshop.services;
 
 import net.yorksolutions.fafoshop.DTOs.CategoryDTO;
+import net.yorksolutions.fafoshop.DTOs.ProductDTO;
 import net.yorksolutions.fafoshop.models.Category;
 import net.yorksolutions.fafoshop.models.Product;
 import net.yorksolutions.fafoshop.repositories.CategoryRepo;
 import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CategoryService {
@@ -24,12 +27,26 @@ public class CategoryService {
         return categoryRepo.findAll();
     }
 
+    public Set<Product> getProductByCategoryName(CategoryDTO productRequest) {
+        Set<Product> products = new HashSet<>();
+
+        for (ProductDTO categoryProducts : productRequest.products) {
+            Category category = new Category();
+            Optional<Product> product = productRepo.findById(categoryProducts.id.get());
+            category.setProducts((Set<Product>) product.get());
+        }
+        return products;
+
+
+    }
 
     public void createCategory(CategoryDTO categoryRequest) throws Exception {
 
         Category category = new Category();
         category.setCategoryName(categoryRequest.categoryName);
-        category.setProducts(categoryRequest.products);
+
+
+        category.setProducts((getProductByCategoryName(categoryRequest)));
 
         categoryRepo.save(category);
 
@@ -46,7 +63,7 @@ public class CategoryService {
     }
 
     // Change name
-    public void updateCategories(Long id, CategoryDTO category) throws Exception {
+    public void updateCategories(Long id, CategoryDTO categoryRequest) throws Exception {
         Optional<Category> currentCategory = categoryRepo.findById(id);
 
         if (currentCategory.isEmpty()) {
@@ -55,8 +72,8 @@ public class CategoryService {
 
         Category getCategory = currentCategory.get();
 
-        getCategory.setCategoryName(category.categoryName);
-        getCategory.setProducts(category.products);
+        getCategory.setCategoryName(categoryRequest.categoryName);
+        getCategory.setProducts((getProductByCategoryName(categoryRequest)));
 
         categoryRepo.save(getCategory);
 
