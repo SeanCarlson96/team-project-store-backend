@@ -4,6 +4,7 @@ import net.yorksolutions.fafoshop.DTOs.CartDTO;
 import net.yorksolutions.fafoshop.models.AppUser;
 import net.yorksolutions.fafoshop.DTOs.ProductInCartDTO;
 import net.yorksolutions.fafoshop.models.Cart;
+import net.yorksolutions.fafoshop.models.Product;
 import net.yorksolutions.fafoshop.models.ProductInCart;
 import net.yorksolutions.fafoshop.repositories.AppUserRepo;
 import net.yorksolutions.fafoshop.repositories.CartRepo;
@@ -11,6 +12,7 @@ import net.yorksolutions.fafoshop.repositories.ProductInCartRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CartService {
@@ -19,11 +21,14 @@ public class CartService {
     private final ProductInCartRepo productInCartRepo;
     private final AppUserRepo appUserRepo;
 
+    private final ProductInCartService productInCartService;
 
-    public CartService(CartRepo cartRepo, AppUserRepo appUserRepo,ProductInCartRepo productInCartRepo) {
+
+    public CartService(CartRepo cartRepo, AppUserRepo appUserRepo,ProductInCartRepo productInCartRepo, ProductInCartService productInCartService) {
         this.cartRepo = cartRepo;
         this.productInCartRepo = productInCartRepo;
         this.appUserRepo = appUserRepo;
+        this.productInCartService = productInCartService;
     }
 
     public Iterable<Cart> getAll() {
@@ -64,7 +69,7 @@ public class CartService {
 //        }
     }
 
-    public void updateCart(Long cartId, ProductInCart product) throws Exception {
+    public void updateCart(Long cartId, ProductInCartDTO product) throws Exception {
         Optional<Cart> cart = cartRepo.findById(cartId);
 
         if (cart.isEmpty()) {
@@ -73,7 +78,11 @@ public class CartService {
 
         Cart cartUpdated = cart.get();
 
-        cartUpdated.getProducts().add(product);
+
+        Set<ProductInCart> productInCart = productInCartService.updateProductInCart(product);
+
+
+        cartUpdated.setProducts(productInCart);
         cartRepo.save(cartUpdated);
 
     }
