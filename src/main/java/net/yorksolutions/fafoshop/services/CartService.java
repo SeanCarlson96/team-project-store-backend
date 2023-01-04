@@ -40,15 +40,10 @@ public class CartService {
     }
 
     public void createCart(CartDTO cartRequest) throws Exception {
-        Optional<Cart> cartOptional = cartRepo.findById(cartRequest.id.get());
-
-        if (cartOptional.isPresent())
-            throw new Exception();
 
         Cart cart = new Cart();
         cart.setPurchaseDate(cart.getPurchaseDate());
         cart.setProducts(cart.getProducts());
-        //cart.setUser(cart.getUser());
 
 //        ProductInCartService service = new ProductInCartService(productInCartRepo);
 ////
@@ -58,15 +53,17 @@ public class CartService {
 
         cartRepo.save(cart);
 
-//        if (cartRequest.getUser() != null) {
-//            Optional<AppUser> appUserOptional = appUserRepo.findById(cart.getUser().getId());
-//            if (appUserOptional.isEmpty())
-//                throw new Exception();
-//
-//            AppUser appUser = appUserOptional.get();
-//            appUser.getCarts().add(cart);
-//            appUserRepo.save(appUser);
-//        }
+
+
+        if (cartRequest.userId != null) {
+            Optional<AppUser> appUserOptional = appUserRepo.findById(cart.getUser().getId());
+            if (appUserOptional.isEmpty())
+                throw new Exception();
+
+            AppUser appUser = appUserOptional.get();
+            appUser.getCarts().add(cart);
+            appUserRepo.save(appUser);
+        }
     }
 
     public void updateCart(Long cartId, ProductInCartDTO product) throws Exception {
