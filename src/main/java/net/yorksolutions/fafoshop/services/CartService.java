@@ -4,19 +4,21 @@ import net.yorksolutions.fafoshop.models.Cart;
 import net.yorksolutions.fafoshop.models.Product;
 import net.yorksolutions.fafoshop.models.ProductInCart;
 import net.yorksolutions.fafoshop.repositories.CartRepo;
+import net.yorksolutions.fafoshop.repositories.ProductInCartRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CartService {
 
     private final CartRepo cartRepo;
+    private final ProductInCartRepo productInCartRepo;
     private CartRepo cartRepo1;
 
-    public CartService(CartRepo cartRepo) {
+    public CartService(CartRepo cartRepo, ProductInCartRepo productInCartRepo) {
         this.cartRepo = cartRepo;
+        this.productInCartRepo = productInCartRepo;
     }
 
     public Iterable<Cart> getAll() {
@@ -35,9 +37,10 @@ public class CartService {
 
         Cart cart = new Cart();
         cart.setPurchaseDate(cart.getPurchaseDate());
-        cart.setProducts(cart.getProducts());
 
         cartRepo.save(cart);
+
+
     }
 
     public void updateCart(Long cartId, ProductInCart product) throws Exception {
