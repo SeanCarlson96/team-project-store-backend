@@ -1,6 +1,10 @@
 package net.yorksolutions.fafoshop.services;
 
 import net.yorksolutions.fafoshop.DTOs.CartDTO;
+<<<<<<< Updated upstream
+=======
+import net.yorksolutions.fafoshop.DTOs.ProductInCartDTO;
+>>>>>>> Stashed changes
 import net.yorksolutions.fafoshop.models.Cart;
 import net.yorksolutions.fafoshop.models.ProductInCart;
 import net.yorksolutions.fafoshop.repositories.CartRepo;
@@ -14,6 +18,7 @@ public class CartService {
 
     private final CartRepo cartRepo;
     private final ProductInCartRepo productInCartRepo;
+
     private CartRepo cartRepo1;
 
     public CartService(CartRepo cartRepo, ProductInCartRepo productInCartRepo) {
@@ -37,6 +42,12 @@ public class CartService {
 
         Cart cart = new Cart();
         cart.setPurchaseDate(cart.getPurchaseDate());
+
+//        ProductInCartService service = new ProductInCartService(productInCartRepo);
+//
+////        Set<ProductInCart> productInCart = service.createProductInCart(cartRequest);
+//
+//        cart.setProducts(productInCart);
 
         cartRepo.save(cart);
 
