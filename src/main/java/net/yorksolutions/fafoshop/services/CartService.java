@@ -1,7 +1,7 @@
 package net.yorksolutions.fafoshop.services;
 
+import net.yorksolutions.fafoshop.DTOs.CartDTO;
 import net.yorksolutions.fafoshop.models.Cart;
-import net.yorksolutions.fafoshop.models.Product;
 import net.yorksolutions.fafoshop.models.ProductInCart;
 import net.yorksolutions.fafoshop.repositories.CartRepo;
 import net.yorksolutions.fafoshop.repositories.ProductInCartRepo;

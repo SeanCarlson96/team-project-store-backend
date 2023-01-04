@@ -4,6 +4,7 @@ import net.yorksolutions.fafoshop.models.Cart;
 
 import java.util.Optional;
 
+
 public class AppUserDTO {
     public Optional<Long> id;
     public String email;
