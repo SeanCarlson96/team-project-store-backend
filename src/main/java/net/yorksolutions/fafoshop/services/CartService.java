@@ -19,8 +19,8 @@ public class CartService {
     private CartRepo cartRepo1;
     private final AppUserRepo appUserRepo;
 
-    public CartService(CartRepo cartRepo, ProductInCartRepo productInCartRepo) {
-    public CartService(CartRepo cartRepo, AppUserRepo appUserRepo) {
+
+    public CartService(CartRepo cartRepo, AppUserRepo appUserRepo,ProductInCartRepo productInCartRepo) {
         this.cartRepo = cartRepo;
         this.productInCartRepo = productInCartRepo;
         this.appUserRepo = appUserRepo;
