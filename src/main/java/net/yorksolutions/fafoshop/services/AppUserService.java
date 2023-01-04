@@ -1,5 +1,6 @@
 package net.yorksolutions.fafoshop.services;
 
+import net.yorksolutions.fafoshop.DTOs.AppUserDTO;
 import net.yorksolutions.fafoshop.models.AppUser;
 import net.yorksolutions.fafoshop.repositories.AppUserRepo;
 import org.springframework.stereotype.Service;
@@ -23,15 +24,14 @@ public class AppUserService {
         return appUserRepo.findAppUserByEmailAndPassword(email, password).orElse(null);
     }
 
-    public void createAppUser(AppUser appUserRequest)  throws Exception{
-        Optional<AppUser> appUserOptional = appUserRepo.findAppUserByEmail(appUserRequest.getEmail());
-        if ( appUserOptional.isPresent() )
-            throw new Exception();
+    public void createAppUser(AppUserDTO appUserRequest)  throws Exception{
+        Optional<AppUser> appUserOptional = appUserRepo.findAppUserByEmail(appUserRequest.email);
+
 
         AppUser appUser = new AppUser();
-        appUser.setEmail(appUserRequest.getEmail());
-        appUser.setPassword(appUserRequest.getPassword());
-        appUser.setUserType(appUserRequest.getUserType());
+        appUser.setEmail(appUserRequest.email);
+        appUser.setPassword(appUserRequest.password);
+        appUser.setUserType(appUserRequest.userType);
         appUserRepo.save(appUser);
     }
 
@@ -44,16 +44,16 @@ public class AppUserService {
         appUserRepo.deleteById(id);
     }
 
-    public void updateAppUser(Long id, AppUser appUserRequest) throws Exception {
+    public void updateAppUser(Long id, AppUserDTO appUserRequest) throws Exception {
         Optional<AppUser> appUserOptional = appUserRepo.findById(id);
 
         if (appUserOptional.isEmpty())
             throw new Exception();
 
         AppUser appUser = appUserOptional.get();
-        appUser.setEmail(appUserRequest.getEmail() );
-        appUser.setPassword(appUserRequest.getPassword());
-        appUser.setUserType(appUserRequest.getUserType());
+        appUser.setEmail(appUserRequest.email );
+        appUser.setPassword(appUserRequest.password);
+        appUser.setUserType(appUserRequest.userType);
         appUserRepo.save(appUser);
     }
 }
