@@ -38,8 +38,14 @@ public class AppUserService {
     }
 
     public void createAppUser(AppUserDTO appUserRequest)  throws Exception{
-        Optional<AppUser> appUserOptional = appUserRepo.findAppUserByEmail(appUserRequest.email);
 
+        Optional<AppUser> appUserOptional = appUserRepo.findAppUserByEmail(appUserRequest.email);
+        if (appUserOptional.isPresent())
+            throw new Exception();
+
+        Optional<AppUser> admin = appUserRepo.findAppUserByUserType("admin");
+        if (appUserRequest.userType.equals("admin") && admin.isPresent())
+            throw new Exception();
 
         AppUser appUser = new AppUser();
         appUser.setEmail(appUserRequest.email);
@@ -73,6 +79,7 @@ public class AppUserService {
             Optional<Coupon> couponOpt = couponRepo.findCouponByCouponName(couponDTO.couponName);
 
             Coupon c = couponOpt.get();
+            c.setUser(appUser);
             couponSet.add(c);
         }
         couponRepo.saveAll(couponSet);

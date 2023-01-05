@@ -10,5 +10,5 @@ public class CouponDTO {
     public Date stopDate;
     public Integer useLimit;
     public Double percentage;
-    public AppUserDTO userId;
+    public Long userId;
 }

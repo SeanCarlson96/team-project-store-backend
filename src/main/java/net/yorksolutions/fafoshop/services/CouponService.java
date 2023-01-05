@@ -58,9 +58,10 @@ public class CouponService {
         if (couponOpt.isEmpty()) {
             throw new Exception();
         }
-        Optional<AppUser> userOpt = appUserRepo.findById(couponRequest.userId.id.get());
-
+        Optional<AppUser> userOpt = appUserRepo.findById(couponRequest.userId);
+        couponOpt.get().setUser(userOpt.get());
         Coupon coupon = couponOpt.get();
+
         coupon.setCouponName(couponRequest.couponName);
         coupon.setStartDate(couponRequest.startDate);
         coupon.setStopDate(couponRequest.stopDate);
