@@ -13,4 +13,6 @@ public interface AppUserRepo extends CrudRepository<AppUser, Long>  {
 
     Optional<AppUser> findAppUserByEmail(String email);
 
+    Optional<AppUser> findAppUserByUserType(String type);
+
 }

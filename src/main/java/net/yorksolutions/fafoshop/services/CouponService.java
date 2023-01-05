@@ -1,5 +1,6 @@
 package net.yorksolutions.fafoshop.services;
 
+import net.yorksolutions.fafoshop.DTOs.CouponDTO;
 import net.yorksolutions.fafoshop.models.AppUser;
 import net.yorksolutions.fafoshop.models.Coupon;
 import net.yorksolutions.fafoshop.repositories.AppUserRepo;
@@ -8,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CouponService {
@@ -22,17 +25,17 @@ public class CouponService {
         return couponRepo.findCouponByCouponName(couponName).orElse(null);
     }
 
-    public void createCoupon(Coupon couponRequest) throws Exception {
-        Optional<Coupon> couponOpt = couponRepo.findCouponByCouponName(couponRequest.getCouponName());
+    public void createCoupon(CouponDTO couponRequest) throws Exception {
+        Optional<Coupon> couponOpt = couponRepo.findCouponByCouponName(couponRequest.couponName);
         if (couponOpt.isPresent())
             throw new Exception();
 
         Coupon coupon = new Coupon();
-        coupon.setCouponName(couponRequest.getCouponName());
-        coupon.setStartDate(couponRequest.getStartDate());
-        coupon.setStopDate(couponRequest.getStopDate());
-        coupon.setUseLimit(couponRequest.getUseLimit());
-        coupon.setPercentage(couponRequest.getPercentage());
+        coupon.setCouponName(couponRequest.couponName);
+        coupon.setStartDate(couponRequest.startDate);
+        coupon.setStopDate(couponRequest.stopDate);
+        coupon.setUseLimit(couponRequest.useLimit);
+        coupon.setPercentage(couponRequest.percentage);
         
 
         couponRepo.save(coupon);
@@ -50,23 +53,26 @@ public class CouponService {
         couponRepo.deleteById(id);
     }
 
-    public void updateCoupon(Long id, Coupon couponRequest) throws Exception {
+    public void updateCoupon(Long id, CouponDTO couponRequest) throws Exception {
         Optional<Coupon> couponOpt = this.couponRepo.findById(id);
         if (couponOpt.isEmpty()) {
             throw new Exception();
         }
-        Optional<AppUser> appUserOpt = appUserRepo.findById(couponRequest.getUser().getId());
-        if (appUserOpt.isEmpty()) {
-            throw new Exception();
-        }
-
+        Optional<AppUser> userOpt = appUserRepo.findById(couponRequest.userId);
+        couponOpt.get().setUser(userOpt.get());
         Coupon coupon = couponOpt.get();
-        coupon.setUser(appUserOpt.get());
-        coupon.setCouponName(couponRequest.getCouponName());
-        coupon.setStartDate(couponRequest.getStartDate());
-        coupon.setStopDate(couponRequest.getStopDate());
-        coupon.setPercentage(couponRequest.getPercentage());
-        coupon.setUseLimit(couponRequest.getUseLimit());
+
+        coupon.setCouponName(couponRequest.couponName);
+        coupon.setStartDate(couponRequest.startDate);
+        coupon.setStopDate(couponRequest.stopDate);
+        coupon.setPercentage(couponRequest.percentage);
+        coupon.setUseLimit(couponRequest.useLimit);
+
+
+        AppUser couponUser = userOpt.get();
+        coupon.setUser(couponUser);
         couponRepo.save(coupon);
     }
+
+
 }
