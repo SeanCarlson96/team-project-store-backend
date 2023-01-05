@@ -82,6 +82,7 @@ public class AppUserService {
             c.setUser(appUser);
             couponSet.add(c);
         }
+        appUser.setCoupons(couponSet);
         couponRepo.saveAll(couponSet);
 
         appUserRepo.save(appUser);
