@@ -1,5 +1,6 @@
 package net.yorksolutions.fafoshop.controllers;
 
+import net.yorksolutions.fafoshop.DTOs.CouponDTO;
 import net.yorksolutions.fafoshop.models.Coupon;
 import net.yorksolutions.fafoshop.services.CouponService;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class CouponController {
     }
 
     @PostMapping
-    public void createCoupon(@RequestBody Coupon coupon) {
+    public void createCoupon(@RequestBody CouponDTO coupon) {
         try{
             service.createCoupon(coupon);
         } catch (Exception e) {
@@ -46,7 +47,7 @@ public class CouponController {
     }
 
     @PutMapping("/{id}")
-    public void updateCoupon(@PathVariable Long id, @RequestBody Coupon coupon) {
+    public void updateCoupon(@PathVariable Long id, @RequestBody CouponDTO coupon) {
         try {
             service.updateCoupon(id, coupon);
         } catch(Exception e) {
