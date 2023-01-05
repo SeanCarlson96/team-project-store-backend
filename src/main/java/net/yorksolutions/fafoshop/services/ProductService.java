@@ -11,6 +11,7 @@ import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import net.yorksolutions.fafoshop.repositories.SaleRepo;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 
 @Service
@@ -109,27 +110,61 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
-    public void updateProduct(Long id, Product productRequest) throws Exception {
+    public void updateProduct(Long id, ProductDTO productRequest) throws Exception {
         Optional<Product> productOptional = productRepo.findById(id);
 
         if (productOptional.isEmpty())
-            throw new Exception();
+            throw new Exception("Product optional is empty");
+        Sale newSale = new Sale();
+        if (productRequest.saleId != null) {
+            Optional<Sale> saleOpt = saleRepo.findById(productRequest.saleId);
+            newSale = saleOpt.get();
+        }
 
-        // TODO - modify product logic
+        Set<Category> categorySet1 = new HashSet<>();
+        if (productRequest.categories != null) {
+            for (CategoryDTO categoryDTO : productRequest.categories) {
+                if (categoryDTO.id.isPresent()) {
+                    Optional<Category> categoryOptional = categoryRepo.findById(categoryDTO.id.get());
+                    if (categoryOptional.isEmpty())
+                        throw new Exception("Category optional is empty");
+
+                    Category category = categoryOptional.get();
+                    categorySet1.add(category);
+                }
+            }
+        }
+
 
         Product product = productOptional.get();
 
-        product.setProductName(productRequest.getProductName());
-        product.setPrice(productRequest.getPrice());
-        product.setSale(productRequest.getSale());
-        product.setCategories(productRequest.getCategories());
-        product.setDescription(productRequest.getDescription());
-        product.setDiscontinued(productRequest.getDiscontinued());
-        product.setImage(productRequest.getImage());
-        product.setAvailableDate(productRequest.getAvailableDate());
-        product.setQuantity(productRequest.getQuantity());
-        product.setMinAdPrice(productRequest.getMinAdPrice());
+        product.setProductName(productRequest.productName);
+        product.setPrice(productRequest.price);
+        product.setSale(newSale);
+        product.setCategories(categorySet1);
+        product.setDescription(productRequest.description);
+        product.setDiscontinued(productRequest.discontinued);
+        product.setImage(productRequest.image);
+        product.setAvailableDate(productRequest.availableDate);
+        product.setQuantity(productRequest.quantity);
+        product.setMinAdPrice(productRequest.minAdPrice);
 
         productRepo.save(product);
+
+        // this is local variable to store updated categories
+        List<Category> categoryList = new ArrayList<>();
+
+        for (Category categoryProduct: product.getCategories()) {
+            // getting one category with matching id
+            Optional<Category> categoryOptional = categoryRepo.findById(categoryProduct.getId());
+            // extracting info from optional
+            Category category = categoryOptional.get();
+            // adds the saved product to the products set
+            category.getProducts().add(product);
+            // adds the updated category to the categoryList
+            categoryList.add(category);
+        }
+        // iterates through category list of updated categories and saves parallel
+        categoryRepo.saveAll(categoryList);
     }
 }

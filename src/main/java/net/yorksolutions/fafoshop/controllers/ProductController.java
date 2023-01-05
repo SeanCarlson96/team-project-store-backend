@@ -50,7 +50,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public void updateProduct(@PathVariable Long id, @RequestBody Product product) {
+    public void updateProduct(@PathVariable Long id, @RequestBody ProductDTO product) {
         try {
             service.updateProduct(id, product);
         } catch (Exception e) {
