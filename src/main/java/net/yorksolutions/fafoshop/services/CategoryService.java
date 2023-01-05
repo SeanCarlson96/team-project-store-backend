@@ -27,12 +27,25 @@ public class CategoryService {
         return categoryRepo.findAll();
     }
 
+//    public Set<Product> getProductById(CategoryDTO productRequest) {
+//        Set<Product> products = new HashSet<>();
+//
+//        for (ProductDTO categoryProducts : productRequest.products) {
+//            Category category = new Category();
+//            Optional<Product> product = productRepo.findById(categoryProducts.id.get());
+//            category.setProducts((Set<Product>) product.get());
+//        }
+//        return products;
+//
+//
+//    }
 
     public void createCategory(CategoryDTO categoryRequest) throws Exception {
 
         Category category = new Category();
         Set<Product> productSet = new HashSet<>();
         category.setCategoryName(categoryRequest.categoryName);
+
 
         for (ProductDTO categoryProduct: categoryRequest.products) {
             Optional<Product> productOptional = productRepo.findById(categoryProduct.id.get());
@@ -43,6 +56,7 @@ public class CategoryService {
         }
 
         category.setProducts(productSet);
+
 
         categoryRepo.save(category);
 
@@ -59,6 +73,7 @@ public class CategoryService {
     }
 
     // Change name
+
 //    public void updateCategories(Long id, CategoryDTO category) throws Exception {
 //        Optional<Category> currentCategory = categoryRepo.findById(id);
 //
