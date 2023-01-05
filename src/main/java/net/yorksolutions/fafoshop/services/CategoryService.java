@@ -7,7 +7,9 @@ import net.yorksolutions.fafoshop.repositories.CategoryRepo;
 import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CategoryService {
@@ -29,7 +31,9 @@ public class CategoryService {
 
         Category category = new Category();
         category.setCategoryName(categoryRequest.categoryName);
-        category.setProducts(categoryRequest.products);
+
+        Set<Product> productSet = new HashSet<>(category.getProducts());
+        category.setProducts(productSet);
 
         categoryRepo.save(category);
 
@@ -46,21 +50,21 @@ public class CategoryService {
     }
 
     // Change name
-    public void updateCategories(Long id, CategoryDTO category) throws Exception {
-        Optional<Category> currentCategory = categoryRepo.findById(id);
-
-        if (currentCategory.isEmpty()) {
-            throw new Exception("Category not found");
-        }
-
-        Category getCategory = currentCategory.get();
-
-        getCategory.setCategoryName(category.categoryName);
-        getCategory.setProducts(category.products);
-
-        categoryRepo.save(getCategory);
-
-    }
+//    public void updateCategories(Long id, CategoryDTO category) throws Exception {
+//        Optional<Category> currentCategory = categoryRepo.findById(id);
+//
+//        if (currentCategory.isEmpty()) {
+//            throw new Exception("Category not found");
+//        }
+//
+//        Category getCategory = currentCategory.get();
+//
+//        getCategory.setCategoryName(category.categoryName);
+//        getCategory.setProducts(category.products);
+//
+//        categoryRepo.save(getCategory);
+//
+//    }
 
     public void deleteCategoryById(Long id) throws Exception {
         Optional<Category> categoryOptional = categoryRepo.findById(id);

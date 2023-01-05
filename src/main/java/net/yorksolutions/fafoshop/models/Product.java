@@ -1,6 +1,7 @@
 package net.yorksolutions.fafoshop.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -18,11 +19,11 @@ public class Product {
     private String productName;
     private Double price;
     @Cascade(CascadeType.ALL)
-    @JsonIgnore
+    @JsonIgnoreProperties("products")
     @ManyToOne
     private Sale sale;
     @Cascade(CascadeType.ALL)
-    @JsonIgnore
+    @JsonIgnoreProperties("products")
     @ManyToMany
     private Set<Category> categories;
     private String description;
