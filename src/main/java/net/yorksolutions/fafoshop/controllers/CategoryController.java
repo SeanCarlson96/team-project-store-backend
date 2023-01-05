@@ -1,5 +1,6 @@
 package net.yorksolutions.fafoshop.controllers;
 
+import net.yorksolutions.fafoshop.DTOs.CategoryDTO;
 import net.yorksolutions.fafoshop.models.Category;
 import net.yorksolutions.fafoshop.services.CategoryService;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,7 @@ public class CategoryController {
     }
 
     @GetMapping(params = {"categoryName"})
-    public Category getCategoryByCategoryName(
-            @RequestParam String categoryName
-    ) {
+    public Category getCategoryByCategoryName(@RequestParam String categoryName) {
         try {
             return service.getCategoryByCategoryName(categoryName);
         } catch (Exception e) {
@@ -33,7 +32,7 @@ public class CategoryController {
     }
 
     @GetMapping(params = {"id"})
-    public Category getCategory(@PathVariable Long id){
+    public Category getCategory(@PathVariable Long id) {
         try {
             return service.getCategoryById(id);
         } catch (Exception e) {
@@ -43,9 +42,7 @@ public class CategoryController {
 
 
     @PostMapping
-    public void createCategory(
-            @RequestBody Category category
-    ) {
+    public void createCategory(@RequestBody CategoryDTO category) {
         try {
             service.createCategory(category);
         } catch (Exception e) {
@@ -54,9 +51,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCategoryById(
-            @PathVariable Long id
-    ) {
+    public void deleteCategoryById(@PathVariable Long id) {
         try {
             service.deleteCategoryById(id);
         } catch (Exception e) {
@@ -64,12 +59,12 @@ public class CategoryController {
         }
     }
 
-    @PutMapping
-    public void updateCategory(@RequestParam Long id, @RequestBody Category category){
-        try{
-            service.updateCategories(id,category);
-        }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @PutMapping
+//    public void updateCategory(@RequestParam Long id, @RequestBody CategoryDTO category) {
+//        try {
+//            service.updateCategories(id, category);
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+//        }
+//    }
 }

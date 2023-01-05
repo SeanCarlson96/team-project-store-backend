@@ -1,6 +1,7 @@
 package net.yorksolutions.fafoshop.controllers;
 
 import net.yorksolutions.fafoshop.DTOs.CartDTO;
+import net.yorksolutions.fafoshop.DTOs.ProductInCartDTO;
 import net.yorksolutions.fafoshop.models.Cart;
 import net.yorksolutions.fafoshop.models.ProductInCart;
 import net.yorksolutions.fafoshop.services.CartService;
@@ -34,7 +35,7 @@ public class CartController {
     }
 
     @PostMapping
-    public void createCart(@RequestBody Cart cart) {
+    public void createCart(@RequestBody CartDTO cart) {
         try {
             cartService.createCart(cart);
         } catch (Exception e){
@@ -52,7 +53,7 @@ public class CartController {
     }
 
     @PutMapping("/{id}")
-    public void updateCart(@PathVariable Long id, @RequestBody ProductInCart product){
+    public void updateCart(@PathVariable Long id, @RequestBody ProductInCartDTO product){
         try{
             cartService.updateCart(id,product);
         }

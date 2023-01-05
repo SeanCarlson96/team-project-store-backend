@@ -9,4 +9,5 @@ public class CartDTO {
 
     public Date purchaseDate;
     public Iterable<ProductInCartDTO> products;
+    public Long userId;
 }

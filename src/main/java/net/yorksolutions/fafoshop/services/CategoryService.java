@@ -1,13 +1,15 @@
 package net.yorksolutions.fafoshop.services;
 
+import net.yorksolutions.fafoshop.DTOs.CategoryDTO;
 import net.yorksolutions.fafoshop.models.Category;
 import net.yorksolutions.fafoshop.models.Product;
 import net.yorksolutions.fafoshop.repositories.CategoryRepo;
 import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CategoryService {
@@ -25,13 +27,13 @@ public class CategoryService {
     }
 
 
-    public void createCategory(Category categoryRequest) throws Exception {
-        if (categoryRepo.findCategoryByCategoryName(categoryRequest.getCategoryName()).isPresent())
-            throw new Exception();
+    public void createCategory(CategoryDTO categoryRequest) throws Exception {
 
         Category category = new Category();
-        category.setCategoryName(categoryRequest.getCategoryName());
-        category.setProducts(categoryRequest.getProducts());
+        category.setCategoryName(categoryRequest.categoryName);
+
+        Set<Product> productSet = new HashSet<>(category.getProducts());
+        category.setProducts(productSet);
 
         categoryRepo.save(category);
 
@@ -48,21 +50,21 @@ public class CategoryService {
     }
 
     // Change name
-    public void updateCategories(Long id, Category category) throws Exception {
-        Optional<Category> currentCategory = categoryRepo.findById(id);
-
-        if (currentCategory.isEmpty()) {
-            throw new Exception("Category not found");
-        }
-
-        Category getCategory = currentCategory.get();
-
-        getCategory.setCategoryName(category.getCategoryName());
-        getCategory.setProducts(category.getProducts());
-
-        categoryRepo.save(getCategory);
-
-    }
+//    public void updateCategories(Long id, CategoryDTO category) throws Exception {
+//        Optional<Category> currentCategory = categoryRepo.findById(id);
+//
+//        if (currentCategory.isEmpty()) {
+//            throw new Exception("Category not found");
+//        }
+//
+//        Category getCategory = currentCategory.get();
+//
+//        getCategory.setCategoryName(category.categoryName);
+//        getCategory.setProducts(category.products);
+//
+//        categoryRepo.save(getCategory);
+//
+//    }
 
     public void deleteCategoryById(Long id) throws Exception {
         Optional<Category> categoryOptional = categoryRepo.findById(id);
@@ -75,6 +77,7 @@ public class CategoryService {
         return categoryRepo.findCategoryByCategoryName(categoryName).orElse(null);
     }
 
-    public Category getCategoryById(Long id) { return categoryRepo.findById(id).orElse(null);
+    public Category getCategoryById(Long id) {
+        return categoryRepo.findById(id).orElse(null);
     }
 }

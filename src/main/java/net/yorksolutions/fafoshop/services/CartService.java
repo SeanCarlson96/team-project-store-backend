@@ -1,24 +1,34 @@
 package net.yorksolutions.fafoshop.services;
 
 import net.yorksolutions.fafoshop.DTOs.CartDTO;
+import net.yorksolutions.fafoshop.models.AppUser;
+import net.yorksolutions.fafoshop.DTOs.ProductInCartDTO;
 import net.yorksolutions.fafoshop.models.Cart;
+import net.yorksolutions.fafoshop.models.Product;
 import net.yorksolutions.fafoshop.models.ProductInCart;
+import net.yorksolutions.fafoshop.repositories.AppUserRepo;
 import net.yorksolutions.fafoshop.repositories.CartRepo;
 import net.yorksolutions.fafoshop.repositories.ProductInCartRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CartService {
 
     private final CartRepo cartRepo;
     private final ProductInCartRepo productInCartRepo;
-    private CartRepo cartRepo1;
+    private final AppUserRepo appUserRepo;
 
-    public CartService(CartRepo cartRepo, ProductInCartRepo productInCartRepo) {
+    private final ProductInCartService productInCartService;
+
+
+    public CartService(CartRepo cartRepo, AppUserRepo appUserRepo,ProductInCartRepo productInCartRepo, ProductInCartService productInCartService) {
         this.cartRepo = cartRepo;
         this.productInCartRepo = productInCartRepo;
+        this.appUserRepo = appUserRepo;
+        this.productInCartService = productInCartService;
     }
 
     public Iterable<Cart> getAll() {
@@ -29,21 +39,34 @@ public class CartService {
         return cartRepo.findById(id).orElse(null);
     }
 
-    public void createCart(Cart cartRequest) throws Exception {
-        Optional<Cart> cartOptional = cartRepo.findById(cartRequest.getId());
-
-        if (cartOptional.isPresent())
-            throw new Exception();
+    public void createCart(CartDTO cartRequest) throws Exception {
 
         Cart cart = new Cart();
         cart.setPurchaseDate(cart.getPurchaseDate());
+        cart.setProducts(cart.getProducts());
+
+//        ProductInCartService service = new ProductInCartService(productInCartRepo);
+////
+//        Set<ProductInCart> productInCart = productInCartService.createProductInCart(cartRequest);
+////
+//        cart.setProducts(productInCart);
 
         cartRepo.save(cart);
 
 
+
+        if (cartRequest.userId != null) {
+            Optional<AppUser> appUserOptional = appUserRepo.findById(cart.getUser().getId());
+            if (appUserOptional.isEmpty())
+                throw new Exception();
+
+            AppUser appUser = appUserOptional.get();
+            appUser.getCarts().add(cart);
+            appUserRepo.save(appUser);
+        }
     }
 
-    public void updateCart(Long cartId, ProductInCart product) throws Exception {
+    public void updateCart(Long cartId, ProductInCartDTO product) throws Exception {
         Optional<Cart> cart = cartRepo.findById(cartId);
 
         if (cart.isEmpty()) {
@@ -52,7 +75,11 @@ public class CartService {
 
         Cart cartUpdated = cart.get();
 
-        cartUpdated.getProducts().add(product);
+
+        Set<ProductInCart> productInCart = productInCartService.updateProductInCart(product);
+
+
+        cartUpdated.setProducts(productInCart);
         cartRepo.save(cartUpdated);
 
     }
