@@ -1,5 +1,6 @@
 package net.yorksolutions.fafoshop.controllers;
 
+import net.yorksolutions.fafoshop.DTOs.ProductDTO;
 import net.yorksolutions.fafoshop.models.Product;
 import net.yorksolutions.fafoshop.services.ProductService;
 import org.springframework.http.HttpStatus;
@@ -31,9 +32,9 @@ public class ProductController {
     }
 
     @PostMapping
-    public void createProduct(@RequestBody Product product) {
+    public void createProduct(@RequestBody ProductDTO productRequest) {
         try {
-            service.createProduct(product);
+            service.createProduct(productRequest);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED);
         }

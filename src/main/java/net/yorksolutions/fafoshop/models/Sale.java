@@ -1,5 +1,6 @@
 package net.yorksolutions.fafoshop.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -17,6 +18,7 @@ public class Sale {
     private Date startDate;
     private Date stopDate;
     @Cascade(CascadeType.ALL)
+    @JsonIgnoreProperties("sale")
     @OneToMany
     private Set<Product> products;
     private Double discountPercentage;

@@ -27,18 +27,18 @@ public class CategoryService {
         return categoryRepo.findAll();
     }
 
-    public Set<Product> getProductById(CategoryDTO productRequest) {
-        Set<Product> products = new HashSet<>();
-
-        for (ProductDTO categoryProducts : productRequest.products) {
-            Category category = new Category();
-            Optional<Product> product = productRepo.findById(categoryProducts.id.get());
-            category.setProducts((Set<Product>) product.get());
-        }
-        return products;
-
-
-    }
+//    public Set<Product> getProductById(CategoryDTO productRequest) {
+//        Set<Product> products = new HashSet<>();
+//
+//        for (ProductDTO categoryProducts : productRequest.products) {
+//            Category category = new Category();
+//            Optional<Product> product = productRepo.findById(categoryProducts.id.get());
+//            category.setProducts((Set<Product>) product.get());
+//        }
+//        return products;
+//
+//
+//    }
 
     public void createCategory(CategoryDTO categoryRequest) throws Exception {
 
@@ -46,7 +46,9 @@ public class CategoryService {
         category.setCategoryName(categoryRequest.categoryName);
 
 
-        category.setProducts((getProductById(categoryRequest)));
+        Set<Product> productSet = new HashSet<>(category.getProducts());
+        category.setProducts(productSet);
+
 
         categoryRepo.save(category);
 
@@ -63,21 +65,22 @@ public class CategoryService {
     }
 
     // Change name
-    public void updateCategories(Long id, CategoryDTO categoryRequest) throws Exception {
-        Optional<Category> currentCategory = categoryRepo.findById(id);
 
-        if (currentCategory.isEmpty()) {
-            throw new Exception("Category not found");
-        }
-
-        Category getCategory = currentCategory.get();
-
-        getCategory.setCategoryName(categoryRequest.categoryName);
-        getCategory.setProducts((getProductById(categoryRequest)));
-
-        categoryRepo.save(getCategory);
-
-    }
+//    public void updateCategories(Long id, CategoryDTO category) throws Exception {
+//        Optional<Category> currentCategory = categoryRepo.findById(id);
+//
+//        if (currentCategory.isEmpty()) {
+//            throw new Exception("Category not found");
+//        }
+//
+//        Category getCategory = currentCategory.get();
+//
+//        getCategory.setCategoryName(category.categoryName);
+//        getCategory.setProducts(category.products);
+//
+//        categoryRepo.save(getCategory);
+//
+//    }
 
     public void deleteCategoryById(Long id) throws Exception {
         Optional<Category> categoryOptional = categoryRepo.findById(id);

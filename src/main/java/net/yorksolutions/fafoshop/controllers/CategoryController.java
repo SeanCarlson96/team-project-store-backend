@@ -59,12 +59,12 @@ public class CategoryController {
         }
     }
 
-    @PutMapping
-    public void updateCategory(@RequestParam Long id, @RequestBody CategoryDTO category) {
-        try {
-            service.updateCategories(id, category);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @PutMapping
+//    public void updateCategory(@RequestParam Long id, @RequestBody CategoryDTO category) {
+//        try {
+//            service.updateCategories(id, category);
+//        } catch (Exception e) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+//        }
+//    }
 }
