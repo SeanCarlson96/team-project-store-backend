@@ -16,7 +16,6 @@ public class Cart {
     @OneToMany
     private Set<ProductInCart> products;
 
-    @JsonIgnore
     @ManyToOne
     private AppUser user;
 
