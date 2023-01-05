@@ -1,6 +1,7 @@
 package net.yorksolutions.fafoshop.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,6 +13,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private Date purchaseDate;
+
 
     @OneToMany
     private Set<ProductInCart> products;
