@@ -1,5 +1,8 @@
 package net.yorksolutions.fafoshop.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.yorksolutions.fafoshop.DTOs.CategoryDTO;
+import net.yorksolutions.fafoshop.DTOs.ProductDTO;
 import net.yorksolutions.fafoshop.models.Category;
 import net.yorksolutions.fafoshop.models.Product;
 import net.yorksolutions.fafoshop.models.Sale;
@@ -8,7 +11,7 @@ import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import net.yorksolutions.fafoshop.repositories.SaleRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -30,46 +33,73 @@ public class ProductService {
         return productRepo.findById(id).orElse(null);
     }
 
-    public void createProduct(Product productRequest) throws Exception {
-        if (productRepo.findProductByProductName(productRequest.getProductName()).isPresent())
-            throw new Exception("Product name already exists");
+    public void createProduct(ProductDTO productRequest) throws Exception {
+        ObjectMapper mapper = new ObjectMapper(); // for dev
 
         Product product = new Product();
-        product.setProductName(productRequest.getProductName());
-        product.setPrice(productRequest.getPrice());
-        product.setSale(productRequest.getSale());
-        product.setCategories(productRequest.getCategories());
-        product.setDescription(productRequest.getDescription());
-        product.setDiscontinued(productRequest.getDiscontinued());
-        product.setImage(productRequest.getImage());
-        product.setAvailableDate(productRequest.getAvailableDate());
-        product.setQuantity(productRequest.getQuantity());
-        product.setMinAdPrice(productRequest.getMinAdPrice());
+        Set<Category> categorySet = new HashSet<>();
 
-        // TODO - post product logic
-
-        productRepo.save(product);
-
-        if (productRequest.getSale() != null) {
-            Optional<Sale> saleOptional = saleRepo.findById(product.getSale().getId());
+        // if there is a sale, add the sale to product entity
+        if (productRequest.saleId != null) {
+            Optional<Sale> saleOptional = saleRepo.findById(productRequest.saleId);
             if (saleOptional.isEmpty())
-                throw new Exception("Sale name does not exist");
+                throw new Exception();
 
             Sale sale = saleOptional.get();
-            sale.getProducts().add(product);
+            product.setSale(sale);
+            System.out.println(mapper.writeValueAsString(product));
+        }
+
+        // find categories from product request and add to category set to save later in product_category
+        for (CategoryDTO categoryDTO: productRequest.categories) {
+            if (categoryDTO.id.isPresent()) {
+                Optional<Category> categoryOptional = categoryRepo.findById(categoryDTO.id.get());
+                if (categoryOptional.isEmpty())
+                    throw new Exception();
+
+                Category category = categoryOptional.get();
+                categorySet.add(category);
+            }
+        }
+
+        product.setProductName(productRequest.productName);
+        product.setPrice(productRequest.price);
+        product.setCategories(categorySet); // saves categories in product
+        product.setDescription(productRequest.description);
+        product.setDiscontinued(productRequest.discontinued);
+        product.setImage(productRequest.image);
+        product.setAvailableDate(productRequest.availableDate);
+        product.setQuantity(productRequest.quantity);
+        product.setMinAdPrice(productRequest.minAdPrice);
+
+        Product savedProduct = productRepo.save(product);
+
+        // if there is a sale, add the product to the sale entity
+        if (product.getSale() != null) {
+            Optional<Sale> saleOptional = saleRepo.findById(productRequest.saleId);
+            if (saleOptional.isEmpty())
+                throw new Exception();
+
+            Sale sale = saleOptional.get();
+            sale.getProducts().add(savedProduct);
             saleRepo.save(sale);
         }
 
-        for (Category productCategory: product.getCategories()) {
-            Optional<Category> categoryOptional = categoryRepo.findById(productCategory.getId());
+        // this is local variable to store updated categories
+        List<Category> categoryList = new ArrayList<>();
 
-            if (categoryOptional.isEmpty())
-                throw new Exception("Category name does not exist");
-
+        for (Category categoryProduct: savedProduct.getCategories()) {
+            // getting one category with matching id
+            Optional<Category> categoryOptional = categoryRepo.findById(categoryProduct.getId());
+            // extracting info from optional
             Category category = categoryOptional.get();
-            category.getProducts().add(product);
-            categoryRepo.save(category);
+            // adds the saved product to the products set
+            category.getProducts().add(savedProduct);
+            // adds the updated category to the categoryList
+            categoryList.add(category);
         }
+        // iterates through category list of updated categories and saves parallel
+        categoryRepo.saveAll(categoryList);
     }
 
     public void deleteProductById(Long id) throws Exception {
