@@ -43,10 +43,18 @@ public class CategoryService {
     public void createCategory(CategoryDTO categoryRequest) throws Exception {
 
         Category category = new Category();
+        Set<Product> productSet = new HashSet<>();
         category.setCategoryName(categoryRequest.categoryName);
 
 
-        Set<Product> productSet = new HashSet<>(category.getProducts());
+        for (ProductDTO categoryProduct: categoryRequest.products) {
+            Optional<Product> productOptional = productRepo.findById(categoryProduct.id.get());
+            if (productOptional.isEmpty())
+                throw new Exception();
+
+            productSet.add(productOptional.get());
+        }
+
         category.setProducts(productSet);
 
 
