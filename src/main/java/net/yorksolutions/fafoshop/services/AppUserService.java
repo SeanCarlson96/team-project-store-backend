@@ -68,6 +68,10 @@ public class AppUserService {
         if (appUserOptional.isEmpty())
             throw new Exception();
 
+        Optional<AppUser> admin = appUserRepo.findAppUserByUserType("admin");
+        if (appUserRequest.userType.equals("admin") && admin.isPresent())
+            throw new Exception();
+
         AppUser appUser = appUserOptional.get();
         appUser.setEmail(appUserRequest.email);
         appUser.setPassword(appUserRequest.password);
