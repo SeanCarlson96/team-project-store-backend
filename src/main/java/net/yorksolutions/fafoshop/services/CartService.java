@@ -48,6 +48,7 @@ public class CartService {
 
         Cart cart = new Cart();
         cart.setPurchaseDate(cartRequest.purchaseDate);
+        System.out.println(mapper.writeValueAsString(cartRequest));
 
         Set<ProductInCart> productsInCart = productInCartService.createProductInCart(cartRequest);
 
@@ -58,6 +59,8 @@ public class CartService {
 
         appUser.getCarts().add(savedCart);
         appUserRepo.save(appUser);
+        System.out.println(mapper.writeValueAsString(savedCart));
+        System.out.println(mapper.writeValueAsString(appUser));
     }
 
     public void updateCart(Long cartId, ProductInCartDTO product) throws Exception {
