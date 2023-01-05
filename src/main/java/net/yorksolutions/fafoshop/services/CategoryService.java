@@ -27,7 +27,7 @@ public class CategoryService {
         return categoryRepo.findAll();
     }
 
-    public Set<Product> getProductByCategoryName(CategoryDTO productRequest) {
+    public Set<Product> getProductById(CategoryDTO productRequest) {
         Set<Product> products = new HashSet<>();
 
         for (ProductDTO categoryProducts : productRequest.products) {
@@ -46,7 +46,7 @@ public class CategoryService {
         category.setCategoryName(categoryRequest.categoryName);
 
 
-        category.setProducts((getProductByCategoryName(categoryRequest)));
+        category.setProducts((getProductById(categoryRequest)));
 
         categoryRepo.save(category);
 
@@ -73,7 +73,7 @@ public class CategoryService {
         Category getCategory = currentCategory.get();
 
         getCategory.setCategoryName(categoryRequest.categoryName);
-        getCategory.setProducts((getProductByCategoryName(categoryRequest)));
+        getCategory.setProducts((getProductById(categoryRequest)));
 
         categoryRepo.save(getCategory);
 
