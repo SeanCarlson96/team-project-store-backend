@@ -34,8 +34,6 @@ public class ProductService {
     }
 
     public void createProduct(ProductDTO productRequest) throws Exception {
-        ObjectMapper mapper = new ObjectMapper(); // for dev
-
         Product product = new Product();
         Set<Category> categorySet = new HashSet<>();
 
@@ -47,7 +45,6 @@ public class ProductService {
 
             Sale sale = saleOptional.get();
             product.setSale(sale);
-            System.out.println(mapper.writeValueAsString(product));
         }
 
         // find categories from product request and add to category set to save later in product_category
@@ -75,7 +72,7 @@ public class ProductService {
         Product savedProduct = productRepo.save(product);
 
         // if there is a sale, add the product to the sale entity
-        if (product.getSale() != null) {
+        if (savedProduct.getSale() != null) {
             Optional<Sale> saleOptional = saleRepo.findById(productRequest.saleId);
             if (saleOptional.isEmpty())
                 throw new Exception();
@@ -109,27 +106,69 @@ public class ProductService {
         productRepo.deleteById(id);
     }
 
-    public void updateProduct(Long id, Product productRequest) throws Exception {
+    public void updateProduct(Long id, ProductDTO productRequest) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
         Optional<Product> productOptional = productRepo.findById(id);
-
         if (productOptional.isEmpty())
             throw new Exception();
 
-        // TODO - modify product logic
-
         Product product = productOptional.get();
 
-        product.setProductName(productRequest.getProductName());
-        product.setPrice(productRequest.getPrice());
-        product.setSale(productRequest.getSale());
-        product.setCategories(productRequest.getCategories());
-        product.setDescription(productRequest.getDescription());
-        product.setDiscontinued(productRequest.getDiscontinued());
-        product.setImage(productRequest.getImage());
-        product.setAvailableDate(productRequest.getAvailableDate());
-        product.setQuantity(productRequest.getQuantity());
-        product.setMinAdPrice(productRequest.getMinAdPrice());
+        System.out.println(mapper.writeValueAsString(productRequest));
 
-        productRepo.save(product);
+        if (productRequest.saleId != null) {
+            Optional<Sale> saleOptional = saleRepo.findById(productRequest.saleId);
+            if (saleOptional.isEmpty())
+                throw new Exception();
+
+            Sale sale = saleOptional.get();
+            product.setSale(sale);
+            System.out.println(mapper.writeValueAsString(product));
+        }
+
+        Set<Category> categorySet = new HashSet<>();
+
+        for (CategoryDTO categoryDTO: productRequest.categories) {
+            if (categoryDTO.id.isPresent()) {
+                Optional<Category> categoryOptional = categoryRepo.findById(categoryDTO.id.get());
+                if (categoryOptional.isEmpty())
+                    throw new Exception();
+
+                Category category = categoryOptional.get();
+                categorySet.add(category);
+            }
+        }
+
+        product.setProductName(productRequest.productName);
+        product.setPrice(productRequest.price);
+        product.setCategories(categorySet);
+        product.setDescription(productRequest.description);
+        product.setDiscontinued(productRequest.discontinued);
+        product.setImage(productRequest.image);
+        product.setAvailableDate(productRequest.availableDate);
+        product.setQuantity(productRequest.quantity);
+        product.setMinAdPrice(productRequest.minAdPrice);
+
+        Product savedProduct = productRepo.save(product);
+
+        if (savedProduct.getSale() != null) {
+            Optional<Sale> saleOptional = saleRepo.findById(productRequest.saleId);
+            if (saleOptional.isEmpty())
+                throw new Exception();
+
+            Sale sale = saleOptional.get();
+            sale.getProducts().add(savedProduct);
+            saleRepo.save(sale);
+        }
+
+        List<Category> categoryList = new ArrayList<>();
+
+        for (Category categoryProduct: savedProduct.getCategories()) {
+            Optional<Category> categoryOptional = categoryRepo.findById(categoryProduct.getId());
+            Category category = categoryOptional.get();
+            category.getProducts().add(savedProduct);
+            categoryList.add(category);
+        }
+        categoryRepo.saveAll(categoryList);
     }
 }
