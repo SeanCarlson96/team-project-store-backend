@@ -8,9 +8,7 @@ import net.yorksolutions.fafoshop.repositories.ProductInCartRepo;
 import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ProductInCartService {
@@ -25,6 +23,7 @@ public class ProductInCartService {
     public Set<ProductInCart> createProductInCart(CartDTO cartRequest){
         Set<ProductInCart> productsInCart = new HashSet<>();
 
+
         //Take productInCart iterable from CartDto
         // convert productInCartDto to productInCart to save repo
         for (ProductInCartDTO productDTO: cartRequest.products) {
@@ -34,11 +33,10 @@ public class ProductInCartService {
             productInCart.setProduct(product.get());
             productInCart.setQuantity(productDTO.quantity);
 
-
-            ProductInCart savedProductInCart = productInCartRepo.save(productInCart);
-            productsInCart.add(savedProductInCart);
+            productsInCart.add(productInCart);
         }
 
+        productInCartRepo.saveAll(productsInCart);
         return productsInCart;
 
     }

@@ -1,6 +1,9 @@
 package net.yorksolutions.fafoshop.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import net.yorksolutions.fafoshop.DTOs.ProductDTO;
+
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -14,6 +17,7 @@ public class Category {
     private Long id;
     @Column(unique = true)
     private String categoryName;
+    @JsonIgnoreProperties("categories")
     @Cascade(CascadeType.ALL)
     @ManyToMany
     private Set<Product> products;
