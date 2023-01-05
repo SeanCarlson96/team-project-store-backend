@@ -1,6 +1,10 @@
 package net.yorksolutions.fafoshop.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.catalina.User;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,6 +20,8 @@ public class Coupon {
     private Date stopDate;
     private Integer useLimit;
     private Double percentage;
+    @JsonIgnoreProperties("coupons")
+    @Cascade(CascadeType.ALL)
     @ManyToOne
     private AppUser user;
 

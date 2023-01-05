@@ -1,5 +1,6 @@
 package net.yorksolutions.fafoshop.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.yorksolutions.fafoshop.DTOs.CartDTO;
 import net.yorksolutions.fafoshop.models.AppUser;
 import net.yorksolutions.fafoshop.DTOs.ProductInCartDTO;
@@ -40,30 +41,23 @@ public class CartService {
     }
 
     public void createCart(CartDTO cartRequest) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        Optional<AppUser> appUserOptional = appUserRepo.findById(cartRequest.userId);
+        if (appUserOptional.isEmpty())
+            throw new Exception();
 
         Cart cart = new Cart();
-        cart.setPurchaseDate(cart.getPurchaseDate());
-        cart.setProducts(cart.getProducts());
+        cart.setPurchaseDate(cartRequest.purchaseDate);
 
-//        ProductInCartService service = new ProductInCartService(productInCartRepo);
-////
-//        Set<ProductInCart> productInCart = productInCartService.createProductInCart(cartRequest);
-////
-//        cart.setProducts(productInCart);
+        Set<ProductInCart> productsInCart = productInCartService.createProductInCart(cartRequest);
 
-        cartRepo.save(cart);
+        cart.setProducts(productsInCart);
+        AppUser appUser = appUserOptional.get();
 
+        Cart savedCart = cartRepo.save(cart);
 
-
-        if (cartRequest.userId != null) {
-            Optional<AppUser> appUserOptional = appUserRepo.findById(cart.getUser().getId());
-            if (appUserOptional.isEmpty())
-                throw new Exception();
-
-            AppUser appUser = appUserOptional.get();
-            appUser.getCarts().add(cart);
-            appUserRepo.save(appUser);
-        }
+        appUser.getCarts().add(savedCart);
+        appUserRepo.save(appUser);
     }
 
     public void updateCart(Long cartId, ProductInCartDTO product) throws Exception {
