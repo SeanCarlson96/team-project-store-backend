@@ -11,12 +11,8 @@ public class ProductDTO {
     public Optional<Long> id;
     public String productName;
     public Double price;
-
     public Long saleId;
-
     public Iterable<CategoryDTO> categories;
-//    public Set<Long> categoryIds;
-
     public String description;
     public Boolean discontinued;
     public String image;

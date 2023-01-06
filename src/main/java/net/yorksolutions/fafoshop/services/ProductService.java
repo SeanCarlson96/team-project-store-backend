@@ -11,7 +11,6 @@ import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import net.yorksolutions.fafoshop.repositories.SaleRepo;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 
 @Service
@@ -35,8 +34,6 @@ public class ProductService {
     }
 
     public void createProduct(ProductDTO productRequest) throws Exception {
-        ObjectMapper mapper = new ObjectMapper(); // for dev
-
         Product product = new Product();
         Set<Category> categorySet = new HashSet<>();
 
@@ -48,7 +45,6 @@ public class ProductService {
 
             Sale sale = saleOptional.get();
             product.setSale(sale);
-            System.out.println(mapper.writeValueAsString(product));
         }
 
         // find categories from product request and add to category set to save later in product_category
@@ -76,7 +72,7 @@ public class ProductService {
         Product savedProduct = productRepo.save(product);
 
         // if there is a sale, add the product to the sale entity
-        if (product.getSale() != null) {
+        if (savedProduct.getSale() != null) {
             Optional<Sale> saleOptional = saleRepo.findById(productRequest.saleId);
             if (saleOptional.isEmpty())
                 throw new Exception();
@@ -111,37 +107,47 @@ public class ProductService {
     }
 
     public void updateProduct(Long id, ProductDTO productRequest) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
         Optional<Product> productOptional = productRepo.findById(id);
-
         if (productOptional.isEmpty())
-            throw new Exception("Product optional is empty");
-        Sale newSale = new Sale();
-        if (productRequest.saleId != null) {
-            Optional<Sale> saleOpt = saleRepo.findById(productRequest.saleId);
-            newSale = saleOpt.get();
-        }
-
-        Set<Category> categorySet1 = new HashSet<>();
-        if (productRequest.categories != null) {
-            for (CategoryDTO categoryDTO : productRequest.categories) {
-                if (categoryDTO.id.isPresent()) {
-                    Optional<Category> categoryOptional = categoryRepo.findById(categoryDTO.id.get());
-                    if (categoryOptional.isEmpty())
-                        throw new Exception("Category optional is empty");
-
-                    Category category = categoryOptional.get();
-                    categorySet1.add(category);
-                }
-            }
-        }
-
+            throw new Exception();
 
         Product product = productOptional.get();
 
+        System.out.println(mapper.writeValueAsString(productRequest));
+
+        if (productRequest.saleId != null) {
+            Optional<Sale> saleOptional = saleRepo.findById(productRequest.saleId);
+            if (saleOptional.isEmpty())
+                throw new Exception();
+
+            Sale sale = saleOptional.get();
+            product.setSale(sale);
+            System.out.println(mapper.writeValueAsString(product));
+        }
+
+        Set<Category> categorySet = new HashSet<>();
+
+        for (CategoryDTO categoryDTO: productRequest.categories) {
+            if (categoryDTO.id.isPresent()) {
+                Optional<Category> categoryOptional = categoryRepo.findById(categoryDTO.id.get());
+                if (categoryOptional.isEmpty())
+                    throw new Exception();
+
+                Category category = categoryOptional.get();
+                System.out.println("123 " + category.getId());
+                categorySet.add(category);
+            }
+        }
+        if (productRequest.categories == null) {
+            System.out.println("requested category list is null");
+        }
         product.setProductName(productRequest.productName);
         product.setPrice(productRequest.price);
-        product.setSale(newSale);
-        product.setCategories(categorySet1);
+        product.setCategories(categorySet);
+        for (Category c: product.getCategories()) {
+            System.out.println("Product's final categories: " + c.getId());
+        }
         product.setDescription(productRequest.description);
         product.setDiscontinued(productRequest.discontinued);
         product.setImage(productRequest.image);
@@ -149,22 +155,28 @@ public class ProductService {
         product.setQuantity(productRequest.quantity);
         product.setMinAdPrice(productRequest.minAdPrice);
 
-        productRepo.save(product);
+        Product savedProduct = productRepo.save(product);
 
-        // this is local variable to store updated categories
+        if (savedProduct.getSale() != null) {
+            Optional<Sale> saleOptional = saleRepo.findById(productRequest.saleId);
+            if (saleOptional.isEmpty())
+                throw new Exception();
+
+            Sale sale = saleOptional.get();
+            sale.getProducts().add(savedProduct);
+            saleRepo.save(sale);
+        }
+
         List<Category> categoryList = new ArrayList<>();
-
-        for (Category categoryProduct: product.getCategories()) {
-            // getting one category with matching id
+        for (Category categoryProduct: savedProduct.getCategories()) {
             Optional<Category> categoryOptional = categoryRepo.findById(categoryProduct.getId());
-            // extracting info from optional
             Category category = categoryOptional.get();
-            // adds the saved product to the products set
-            category.getProducts().add(product);
-            // adds the updated category to the categoryList
+
+            category.getProducts().add(savedProduct); //more logic needed here
             categoryList.add(category);
         }
-        // iterates through category list of updated categories and saves parallel
+        System.out.println("categoryList: " + categoryList);
+        //the product relationships are still stuck in the category repo
         categoryRepo.saveAll(categoryList);
     }
 }

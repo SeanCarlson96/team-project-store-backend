@@ -50,9 +50,9 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public void updateProduct(@PathVariable Long id, @RequestBody ProductDTO product) {
+    public void updateProduct(@PathVariable Long id, @RequestBody ProductDTO productRequest) {
         try {
-            service.updateProduct(id, product);
+            service.updateProduct(id, productRequest);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
