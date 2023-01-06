@@ -48,6 +48,7 @@ public class CartController {
         try{
             cartService.deleteCartById(id);
         } catch (Exception e){
+            System.out.println(e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }

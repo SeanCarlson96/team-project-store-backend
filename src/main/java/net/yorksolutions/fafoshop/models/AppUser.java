@@ -17,6 +17,7 @@ public class AppUser {
     private String password;
     private String userType;
 
+    @Cascade(value = CascadeType.DETACH)
     @OneToMany
     private Set<Cart> carts;
 

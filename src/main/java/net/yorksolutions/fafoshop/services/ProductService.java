@@ -151,13 +151,19 @@ public class ProductService {
                     throw new Exception();
 
                 Category category = categoryOptional.get();
+                System.out.println("123 " + category.getId());
                 categorySet.add(category);
             }
         }
-
+        if (productRequest.categories == null) {
+            System.out.println("requested category list is null");
+        }
         product.setProductName(productRequest.productName);
         product.setPrice(productRequest.price);
         product.setCategories(categorySet);
+        for (Category c: product.getCategories()) {
+            System.out.println("Product's final categories: " + c.getId());
+        }
         product.setDescription(productRequest.description);
         product.setDiscontinued(productRequest.discontinued);
         product.setImage(productRequest.image);
@@ -178,13 +184,15 @@ public class ProductService {
         }
 
         List<Category> categoryList = new ArrayList<>();
-
         for (Category categoryProduct: savedProduct.getCategories()) {
             Optional<Category> categoryOptional = categoryRepo.findById(categoryProduct.getId());
             Category category = categoryOptional.get();
-            category.getProducts().add(savedProduct);
+
+            category.getProducts().add(savedProduct); //more logic needed here
             categoryList.add(category);
         }
+        System.out.println("categoryList: " + categoryList);
+        //the product relationships are still stuck in the category repo
         categoryRepo.saveAll(categoryList);
     }
 }
