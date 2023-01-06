@@ -18,7 +18,6 @@ public class Category {
     @Column(unique = true)
     private String categoryName;
     @JsonIgnoreProperties("categories")
-    @Cascade(CascadeType.ALL)
     @ManyToMany
     private Set<Product> products;
     public Category(Long id, String categoryName, Set<Product> products) {
