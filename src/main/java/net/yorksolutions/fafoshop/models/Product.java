@@ -22,7 +22,6 @@ public class Product {
     @JsonIgnoreProperties("products")
     @ManyToOne
     private Sale sale;
-    @Cascade(CascadeType.ALL)
     @JsonIgnoreProperties("products")
     @ManyToMany
     private Set<Category> categories;

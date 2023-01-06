@@ -11,6 +11,7 @@ import net.yorksolutions.fafoshop.repositories.ProductRepo;
 import net.yorksolutions.fafoshop.repositories.SaleRepo;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -95,14 +96,29 @@ public class ProductService {
             // adds the updated category to the categoryList
             categoryList.add(category);
         }
-        // iterates through category list of updated categories and saves parallel
+        // iterates through category list of updated categories
         categoryRepo.saveAll(categoryList);
     }
 
+@Transactional
     public void deleteProductById(Long id) throws Exception {
-        if (productRepo.findById(id).isEmpty())
+        Optional<Product> productOptional = productRepo.findById(id);
+        if (productOptional.isEmpty())
             throw new Exception();
 
+        Product product = productOptional.get();
+        Iterable<Category> categoryIterable = categoryRepo.findAll();
+        List<Category> categoryList = new ArrayList<>();
+
+        for (Category category: categoryIterable) {
+            categoryList.add(category);
+        }
+
+        for (Category cat: categoryList) {
+            cat.getProducts().remove(product);
+        }
+
+        categoryRepo.saveAll(categoryList);
         productRepo.deleteById(id);
     }
 
